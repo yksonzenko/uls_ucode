@@ -5,10 +5,9 @@
 #include <dirent.h>
 #include <sys/types.h>
 
-#define INVALID_USAGE "usage: uls [-l] [file ...]"
+#define INVALID_USAGE "usage: uls [-ali] [file ...]"
 
 #define FLAGS "a l i \0"
-#define FLAG_a
 
 typedef struct s_flags {
     int argc;
@@ -21,6 +20,8 @@ typedef struct s_flags {
 
 
 void mx_check_flags(t_flags *flags);
+void mx_flag_a(t_flags *flags);
+void mx_flag_l(t_flags *flags);
 void mx_flag_i(t_flags *flags);
 
 #endif
