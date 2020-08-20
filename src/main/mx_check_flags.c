@@ -4,7 +4,7 @@ static void check_what_flag(t_flags *flags);
 static void connect_flags(t_flags *flags);
 
 void mx_check_flags(t_flags *flags) {
-// check for flags
+// searching for flags
     flags->switch_flags = (int *)malloc(sizeof(int) * 3);
     for (int i = 0; i < 3; i++) {
         flags->switch_flags[i] = 0;

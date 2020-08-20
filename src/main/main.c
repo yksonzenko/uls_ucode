@@ -1,7 +1,5 @@
 #include "yksuls.h"
 
-
-
 int main(int argc, char **argv) {
     t_flags *flags = (t_flags*)malloc(sizeof(t_flags));
     flags->all_flags = (char **)malloc(sizeof(char *) * 3);
@@ -9,10 +7,10 @@ int main(int argc, char **argv) {
     flags->argc = argc;
     flags->argv = argv;
 
-// if just ./uls
     DIR *d;
     struct dirent *dir;
     d = opendir(".");
+// if just ./uls
     if (flags->argc == 1) {
         if (d) {
             while ((dir = readdir(d)) != NULL)
@@ -23,6 +21,6 @@ int main(int argc, char **argv) {
         }
         closedir(d);
     }
-    // mx_printint(flags->argc);
+// if ./uls + flags(-i -l -la ...)
     mx_check_flags(flags);
 }
