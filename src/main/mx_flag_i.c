@@ -8,13 +8,14 @@ static void file_dir_sort(char ***files, char ***dirs, t_flags *flags); //TODO s
 
 
 void mx_flag_i(t_flags *flags) { //TODO make three+ obj
+    printf("TEST\n");
     if (flags->argc == 1) {
         one_obj(flags->argv[2]);
     }
-    else if (flags->argc == 0) {
+    else if (flags->argc == 2) {
         zero_obj();
     }
-    else if (flags->argc >= 2) {
+    else if (flags->argc >= 3) {    //     printf("%s", "&!R@#");
         two_and_more_obj(flags);
     }
 }
