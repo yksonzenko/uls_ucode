@@ -16,6 +16,7 @@ typedef struct s_flags {
     int *switch_flags;
     char **all_obj; // dir and files
     int fi; // flag index
+    int count_obj;
 }       t_flags;
 
 
