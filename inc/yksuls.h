@@ -6,6 +6,7 @@
 #include <sys/types.h>
 
 #define INVALID_USAGE "usage: uls [-ali] [file ...]"
+#define ILLEGAL_OPT "uls: illegal option -- "
 
 #define FLAGS "a l i \0"
 
@@ -21,8 +22,13 @@ typedef struct s_flags {
 
 
 void mx_check_flags(t_flags *flags);
+void mx_illegal_option(char *not_flag);
+
+void mx_print_root_files(t_flags *flags);
+
 void mx_flag_a(t_flags *flags);
 void mx_flag_l(t_flags *flags);
 void mx_flag_i(t_flags *flags);
+void mx_flag_a_l(t_flags *flags);
 
 #endif
