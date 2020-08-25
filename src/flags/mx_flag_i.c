@@ -8,7 +8,7 @@
 
 
 void mx_flag_i(t_flags *flags) { //TODO make three+ obj
-    printf("FLAG -i FUNCTION\n");
+    // printf("FLAG -i FUNCTION\n");
 //     if (flags->argc == 1) {
 //         one_obj(flags->argv[2]);
 //     }

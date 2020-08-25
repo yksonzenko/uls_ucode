@@ -7,8 +7,11 @@ int main(int argc, char **argv) {
     flags->argc = argc;
     flags->argv = argv;
 
+// check illegal flags
+    mx_error_illegal_option(flags);
 // if just ./uls
     mx_print_root_files(flags);
 // if ./uls + flags(-i -l -la ...)
     mx_check_flags(flags);
+    // system("leaks -q uls");
 }

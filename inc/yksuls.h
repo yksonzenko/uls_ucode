@@ -4,6 +4,8 @@
 #include "libmx.h"
 #include <dirent.h>
 #include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 #define INVALID_USAGE "usage: uls [-ali] [file ...]"
 #define ILLEGAL_OPT "uls: illegal option -- "
@@ -22,7 +24,10 @@ typedef struct s_flags {
 
 
 void mx_check_flags(t_flags *flags);
-void mx_illegal_option(char *not_flag);
+
+// errors
+void mx_error_illegal_option(t_flags *flags);
+void mx_no_file_dir(char *fd);
 
 void mx_print_root_files(t_flags *flags);
 
