@@ -6,6 +6,10 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <sys/types.h>
+#include <sys/xattr.h>
+#include <pwd.h>
+#include <time.h>
 
 #define INVALID_USAGE "usage: uls [-ali] [file ...]"
 #define ILLEGAL_OPT "uls: illegal option -- "
@@ -22,6 +26,18 @@ typedef struct s_flags {
     int count_obj;
 }       t_flags;
 
+typedef struct s_lattrib {
+    int *id;
+    int *bl;
+    char *ftype;
+    char *rights;
+    int *lins;
+    char *user;
+    int *group;
+    int *size;
+    int *full_time;
+    int *name;
+}       t_lattrib;
 
 void mx_check_flags(t_flags *flags);
 
