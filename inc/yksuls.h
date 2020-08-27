@@ -10,6 +10,7 @@
 #include <sys/xattr.h>
 #include <pwd.h>
 #include <time.h>
+#include <sys/ioctl.h>
 
 #define INVALID_USAGE "usage: uls [-ali] [file ...]"
 #define ILLEGAL_OPT "uls: illegal option -- "
@@ -36,10 +37,17 @@ typedef struct s_lattrib {
     int *group;
     int *size;
     int *full_time;
-    int *name;
+    char *name;
 }       t_lattrib;
 
-void mx_check_flags(t_flags *flags);
+typedef struct s_sorted_obj {
+    char **files;
+    char **dirs;
+    int len_of_files_array;
+    int len_of_dirs_array;
+}              t_sorted_odj;
+
+void mx_check_flags(t_flags *flags, t_sorted_odj *sort);
 
 // errors
 void mx_error_illegal_option(t_flags *flags);
@@ -47,9 +55,18 @@ void mx_no_file_dir(char *fd);
 
 void mx_print_root_files(t_flags *flags);
 
+// flags
+void mx_flag_l(t_flags *flags, t_sorted_odj *sort);
+void mx_specify_type_file(struct stat sb);
+void mx_print_permissions_list(t_lattrib **lattrib, struct stat sb);
+
 void mx_flag_a(t_flags *flags);
-void mx_flag_l(t_flags *flags);
-void mx_flag_i(t_flags *flags);
+void mx_flag_i(t_flags *flags, t_sorted_odj *sort);
 void mx_flag_a_l(t_flags *flags);
+
+// ilay
+void mx_output_by_size_of_wind(char **array, int len_of_array);
+void mx_alphabet_sort2(char **array, int len);
+int mx_the_biggest_name(char **array, int len);
 
 #endif

@@ -1,11 +1,11 @@
 #include "yksuls.h"
 
 // point which flag to be used
-static void check_and_connect_flags(t_flags *flags);
+static void check_and_connect_flags(t_flags *flags, t_sorted_odj *sort);
 static void store_all_obj_array(t_flags *flags, int k);
 
 // searching for flags
-void mx_check_flags(t_flags *flags) {
+void mx_check_flags(t_flags *flags, t_sorted_odj *sort) {
     flags->count_obj = 0;
     flags->switch_flags = (int *)malloc(sizeof(int) * 3);
     flags->all_obj = (char **)malloc(sizeof(char *) * 1000);
@@ -35,28 +35,29 @@ void mx_check_flags(t_flags *flags) {
         if (flags->argv[k][0] != '-') {
             store_all_obj_array(flags, k);
             // printf("OBJ_COUNT: %d\n", flags->count_obj);
-            printf("ALL_OBJECTS\n");
-            mx_print_strarr(flags->all_obj, "\t");
+            // printf("ALL_OBJECTS\n");
+            // mx_print_strarr(flags->all_obj, "\t");
             break;
         }
     }
 // -----------
-        printf("\n--switch_flags--\n");
-        printf("%d\t", flags->switch_flags[0]);
-        printf("%d\t", flags->switch_flags[1]);
-        printf("%d\t\n\n", flags->switch_flags[2]);
+        // printf("\n--switch_flags--\n");
+        // printf("%d\t", flags->switch_flags[0]);
+        // printf("%d\t", flags->switch_flags[1]);
+        // printf("%d\t\n\n", flags->switch_flags[2]);
 // -----------
-    check_and_connect_flags(flags);
+    check_and_connect_flags(flags, sort);
 }
 
 static void store_all_obj_array(t_flags *flags, int k) {
     for (int i = 0; flags->argv[k]; i++, k++) {
-        flags->all_obj[i] = flags->argv[k];
+        //flags->all_obj[i] = flags->argv[k];
+        flags->all_obj[i] = mx_strdup(flags->argv[k]);
         flags->count_obj++;
     }
 }
 
-static void check_and_connect_flags(t_flags *flags) {
+static void check_and_connect_flags(t_flags *flags, t_sorted_odj *sort) {
 // flag -a
     if (flags->switch_flags[0] == 1 && flags->switch_flags[1] == 0 &&
         flags->switch_flags[2] == 0)
@@ -64,11 +65,11 @@ static void check_and_connect_flags(t_flags *flags) {
 // flag -l
     if (flags->switch_flags[0] == 0 && flags->switch_flags[1] == 1 &&
         flags->switch_flags[2] == 0)
-        mx_flag_l(flags);
+        mx_flag_l(flags, sort);
 // flag -i
     if (flags->switch_flags[0] == 0 && flags->switch_flags[1] == 0 &&
         flags->switch_flags[2] == 1)
-        mx_flag_i(flags);
+        mx_flag_i(flags, sort);
 // flags -a and -l
     if (flags->switch_flags[0] == 1 && flags->switch_flags[1] == 1)
         mx_flag_a_l(flags);

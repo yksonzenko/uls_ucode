@@ -4,7 +4,7 @@ void mx_print_root_files(t_flags *flags) {
     flags->count_obj = 0;
     DIR *d;
     struct dirent *dir;
-
+    
     d = opendir(".");
     if (flags->argc == 1) {
         if (d) {
