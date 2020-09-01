@@ -30,12 +30,12 @@ typedef struct s_flags {
 typedef struct s_lattrib {
     int *id;
     int *bl;
-    char *ftype;
+    char ftype;
     char *rights;
     int *lins;
     char *user;
     int *group;
-    int *size;
+    off_t size;
     int *full_time;
     char *name;
 }       t_lattrib;
@@ -48,6 +48,7 @@ typedef struct s_sorted_obj {
 }              t_sorted_odj;
 
 void mx_check_flags(t_flags *flags, t_sorted_odj *sort);
+void mx_cleaner(t_flags *flags, t_lattrib **lattrib);
 
 // errors
 void mx_error_illegal_option(t_flags *flags);
@@ -57,7 +58,7 @@ void mx_print_root_files(t_flags *flags);
 
 // flags
 void mx_flag_l(t_flags *flags, t_sorted_odj *sort);
-void mx_specify_type_file(struct stat sb);
+void mx_specify_type_file(struct stat sb, t_lattrib **lattrib, int i);
 void mx_print_permissions_list(t_lattrib **lattrib, struct stat sb);
 
 void mx_flag_a(t_flags *flags);

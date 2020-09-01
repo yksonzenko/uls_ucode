@@ -14,5 +14,6 @@ int main(int argc, char **argv) {
     mx_print_root_files(flags);
 // if ./uls + flags(-i -l -la ...)
     mx_check_flags(flags, sort);
+
     // system("leaks -q uls");
 }

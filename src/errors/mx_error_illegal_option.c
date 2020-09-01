@@ -17,7 +17,8 @@ void mx_error_illegal_option(t_flags *flags) {
     char our_flags[4] = "ali";
 
     for (int i = 1; i < flags->argc; i++)
-        if (flags->argv[i][0] == '-' && flags->argv[i][1] != '-')
+        if ((flags->argv[i][0] == '-' && flags->argv[i][1] != '-') ||
+            (flags->argv[i][1] == '-' && flags->argv[i][2]))
             for (int j = 1; flags->argv[i][j]; j++)
                 if (!mx_strchr(our_flags, flags->argv[i][j]))
                     illegal_opt_print(flags->argv[i][j]);

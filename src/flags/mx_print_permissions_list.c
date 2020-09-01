@@ -5,7 +5,7 @@
  */
 void mx_print_permissions_list(t_lattrib **lattrib, struct stat sb) {
     for (int i = 0; i < 10; i++) {
-        lattrib[i]->rights = mx_strnew(9);
+        lattrib[i]->rights = mx_strnew(10);
             for (int j = 0; j < 9; j++) {
                 lattrib[i]->rights[j] = '-';
                 int mode = sb.st_mode;
@@ -18,7 +18,6 @@ void mx_print_permissions_list(t_lattrib **lattrib, struct stat sb) {
                     lattrib[i]->rights[6] = ((mode & S_IROTH) ? 'r' : '-');
                     lattrib[i]->rights[7] = ((mode & S_IWOTH) ? 'w' : '-');
                     lattrib[i]->rights[8] = ((mode & S_IXOTH) ? 'x' : '-');
-                // mx_printstr(lattrib->rights);
             }
     }
 }

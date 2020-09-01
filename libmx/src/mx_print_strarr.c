@@ -14,5 +14,6 @@ void mx_print_strarr(char **arr, const char *delim) {
 				a++;
 		}
 	}
-	write(1, "\n", 1);
+	write(1, delim, 1);
+	// write(1, "\n", 1);
 }
