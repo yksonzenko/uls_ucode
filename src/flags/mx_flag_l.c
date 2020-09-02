@@ -17,7 +17,7 @@ static void one_obj(char *obj, t_flags *flags, t_lattrib **lattrib) {
     DIR *d;
     struct stat sb;
     struct dirent *dir;
-    char **str = NULL;
+    struct passwd *passwd; // get username
     int i = 0;
 
     d = opendir(obj);
@@ -32,28 +32,39 @@ static void one_obj(char *obj, t_flags *flags, t_lattrib **lattrib) {
             lattrib[i]->name = mx_strdup(dir->d_name);
             stat(lattrib[i]->name, &sb);
             mx_specify_type_file(sb, lattrib, i);
-            mx_print_permissions_list(lattrib, sb);
+            mx_print_permissions_list(lattrib, sb, i);
+            lattrib[i]->links = sb.st_nlink;
+            passwd = getpwuid(sb.st_uid);
+            lattrib[i]->user = mx_strdup(passwd->pw_name);
+            lattrib[i]->group = sb.st_gid;
+            lattrib[i]->size = sb.st_size;
+            mx_time_modif(sb, lattrib, i);
+            lattrib[i]->time = mx_strdup(ctime(&sb.st_mtime));
             i++;
         }
     }
+    closedir(d);
+// ./uls -l print output
+    mx_struct_sort(lattrib, flags);
     for (int j = 0; j < flags->count_obj; j++) {
-        mx_printstr(lattrib[j]->name);
-        mx_printchar('\t');
         mx_printchar(lattrib[j]->ftype);
         mx_printstr(lattrib[j]->rights);
-        mx_printchar('\n');
+        mx_printchar(' ');
+
+        mx_printint(lattrib[j]->links);
+        mx_printchar('\t');
+        mx_printstr(lattrib[j]->user);
+        mx_printchar('\t');
+        mx_printint(lattrib[j]->group);
+        mx_printchar('\t');
+        mx_printint(lattrib[j]->size);
+        mx_printchar('\t');
+        mx_printstr(lattrib[j]->time);
+        // mx_printchar('\t');
+        // mx_printstr(lattrib[j]->name);
+        // mx_printchar('\n');
     }
 }
-
-                // for (int h = 0; h < 10; h++) {
-                //     mx_specify_type_file(sb, lattrib);
-                //     mx_printchar(lattrib[h]->ftype);
-                //     mx_printchar('\n');
-                // }
-    // if (string)
-    //     free(string);
-    // closedir(d);
-// }
 
 // // id flag -i
 //             lattrib->id = mx_strdup(dir->d_ino);
@@ -83,7 +94,7 @@ static void one_obj(char *obj, t_flags *flags, t_lattrib **lattrib) {
 //             mx_printchar('\t');
 //             mx_printint(sb.st_size);
 //             mx_printchar('\t');
-//             char *time = ctime(&sb.st_mtime);
+            // char *time = ctime(&sb.st_mtime);
 //             time[mx_strlen(time) - 1] = '\0';
 //             mx_printstr(time);
 //             mx_printchar('\t');

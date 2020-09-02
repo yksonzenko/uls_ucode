@@ -2,15 +2,14 @@
 #define YKSULS_H
 
 #include "libmx.h"
-#include <dirent.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <unistd.h>
-#include <sys/types.h>
+#include <sys/ioctl.h>
 #include <sys/xattr.h>
+#include <dirent.h>
+#include <unistd.h>
 #include <pwd.h>
 #include <time.h>
-#include <sys/ioctl.h>
 
 #define INVALID_USAGE "usage: uls [-ali] [file ...]"
 #define ILLEGAL_OPT "uls: illegal option -- "
@@ -28,15 +27,15 @@ typedef struct s_flags {
 }       t_flags;
 
 typedef struct s_lattrib {
-    int *id;
-    int *bl;
+    int id;
+    int bl;
     char ftype;
     char *rights;
-    int *lins;
+    int links;
     char *user;
-    int *group;
-    off_t size;
-    int *full_time;
+    int group;
+    int size;
+    char *time;
     char *name;
 }       t_lattrib;
 
@@ -50,6 +49,9 @@ typedef struct s_sorted_obj {
 void mx_check_flags(t_flags *flags, t_sorted_odj *sort);
 void mx_cleaner(t_flags *flags, t_lattrib **lattrib);
 
+//additional
+void mx_struct_sort(t_lattrib **lattrib, t_flags *flags);
+
 // errors
 void mx_error_illegal_option(t_flags *flags);
 void mx_no_file_dir(char *fd);
@@ -59,7 +61,8 @@ void mx_print_root_files(t_flags *flags);
 // flags
 void mx_flag_l(t_flags *flags, t_sorted_odj *sort);
 void mx_specify_type_file(struct stat sb, t_lattrib **lattrib, int i);
-void mx_print_permissions_list(t_lattrib **lattrib, struct stat sb);
+void mx_print_permissions_list(t_lattrib **lattrib, struct stat sb, int i);
+void mx_time_modif(struct stat sb, t_lattrib **lattrib, int i);
 
 void mx_flag_a(t_flags *flags);
 void mx_flag_i(t_flags *flags, t_sorted_odj *sort);

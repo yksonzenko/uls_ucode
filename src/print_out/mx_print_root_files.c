@@ -13,7 +13,7 @@ void mx_print_root_files(t_flags *flags) {
                     flags->count_obj++;
         }
         closedir(d);
-        
+
         d = opendir(".");
         int i = 0;
         flags->all_obj = (char **)malloc(sizeof(char *) * flags->count_obj + 1);
@@ -26,6 +26,7 @@ void mx_print_root_files(t_flags *flags) {
         flags->all_obj[i] = NULL;
         mx_bubble_sort(flags->all_obj, flags->count_obj);
         mx_print_strarr(flags->all_obj, "\t"); // TODO change function for output
+        mx_printchar('\n');
         mx_del_strarr(&flags->all_obj);
         closedir(d);
     }
