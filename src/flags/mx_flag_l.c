@@ -3,14 +3,15 @@
 static void one_obj(char *obj, t_flags *flags, t_lattrib **lattrib);
 static void total_blocks(t_flags *flags, t_lattrib **lattrib);
 
-void mx_flag_l(t_flags *flags, t_sorted_odj *sort) {
-    t_lattrib **lattrib = (t_lattrib **)malloc(sizeof(t_lattrib *) * 10);
-    for (int i = 0; i < 10; i++) {
+t_lattrib **mx_flag_l(t_flags *flags, t_sorted_odj *sort) {
+    t_lattrib **lattrib = (t_lattrib **)malloc(sizeof(t_lattrib *) * 1000);
+    for (int i = 0; i < 1000; i++) {
         lattrib[i] = malloc(sizeof(t_lattrib));
     }
     if (flags->count_obj == 0) {
         one_obj(".", flags, lattrib);
     }
+    return lattrib;
 }
 
 static void one_obj(char *obj, t_flags *flags, t_lattrib **lattrib) {

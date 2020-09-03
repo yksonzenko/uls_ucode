@@ -26,6 +26,9 @@ void mx_print_root_files(t_flags *flags) {
         mx_bubble_sort(flags->all_obj, flags->count_obj);
         mx_print_strarr(flags->all_obj, "\t"); // TODO change function for output
         mx_printchar('\n');
-        mx_del_strarr(&flags->all_obj);
+        if (flags->all_obj) {
+            mx_strdel(&flags->all_obj[999]);
+            mx_del_strarr(&flags->all_obj);
+        }
         closedir(d);
 }

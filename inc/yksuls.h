@@ -32,7 +32,7 @@ typedef struct s_flags {
     int *switch_flags;
     char **all_obj; // dir and files
     int fi; // flag index
-    int count_obj;
+    int count_obj; // number of objects from argv
 }       t_flags;
 
 typedef struct s_lattrib {
@@ -66,10 +66,11 @@ void mx_error_illegal_option(t_flags *flags);
 void mx_no_file_dir(char *fd);
 
 // flags
-void mx_flag_l(t_flags *flags, t_sorted_odj *sort);
+t_lattrib **mx_flag_l(t_flags *flags, t_sorted_odj *sort);
 void mx_specify_type_file(struct stat sb, t_lattrib **lattrib, int i);
 void mx_print_permissions_list(t_lattrib **lattrib, struct stat sb, int i);
 void mx_time_modif(struct stat sb, t_lattrib **lattrib, int i);
+void mx_check_and_connect_flags(t_flags *flags, t_sorted_odj *sort);
 
 // print output
 void mx_print_root_files(t_flags *flags);

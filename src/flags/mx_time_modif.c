@@ -6,7 +6,7 @@ static void hours_minutes(struct stat sb, t_lattrib **lattrib, int i);
 void mx_time_modif(struct stat sb, t_lattrib **lattrib, int i) {
     time_t seconds;
     seconds = time(NULL);
-    lattrib[i]->time = (char *)malloc(sizeof(char) * 12);
+    lattrib[i]->time = mx_strnew(12);
 
     lattrib[i]->time[0] = ctime(&sb.st_mtime)[4];
     lattrib[i]->time[1] = ctime(&sb.st_mtime)[5];
