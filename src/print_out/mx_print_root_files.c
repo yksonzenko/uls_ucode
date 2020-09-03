@@ -6,7 +6,6 @@ void mx_print_root_files(t_flags *flags) {
     struct dirent *dir;
 
     d = opendir(".");
-    if (flags->argc == 1) {
         if (d) {
             while ((dir = readdir(d)) != NULL)
                 if (dir->d_name[0] != '.')
@@ -29,5 +28,4 @@ void mx_print_root_files(t_flags *flags) {
         mx_printchar('\n');
         mx_del_strarr(&flags->all_obj);
         closedir(d);
-    }
 }

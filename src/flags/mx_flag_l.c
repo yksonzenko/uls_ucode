@@ -1,13 +1,13 @@
 #include "yksuls.h"
 
 static void one_obj(char *obj, t_flags *flags, t_lattrib **lattrib);
+static void total_blocks(t_flags *flags, t_lattrib **lattrib);
 
 void mx_flag_l(t_flags *flags, t_sorted_odj *sort) {
     t_lattrib **lattrib = (t_lattrib **)malloc(sizeof(t_lattrib *) * 10);
     for (int i = 0; i < 10; i++) {
         lattrib[i] = malloc(sizeof(t_lattrib));
     }
-    mx_printstr("\nid    bl ftype rights  links   user    group   size    time full     name\n\n");
     if (flags->count_obj == 0) {
         one_obj(".", flags, lattrib);
     }
@@ -39,14 +39,18 @@ static void one_obj(char *obj, t_flags *flags, t_lattrib **lattrib) {
             lattrib[i]->group = sb.st_gid;
             lattrib[i]->size = sb.st_size;
             mx_time_modif(sb, lattrib, i);
-            lattrib[i]->time = mx_strdup(ctime(&sb.st_mtime));
+            lattrib[i]->bl = sb.st_blocks;
             i++;
         }
     }
     closedir(d);
 // ./uls -l print output
     mx_struct_sort(lattrib, flags);
+    total_blocks(flags, lattrib);
     for (int j = 0; j < flags->count_obj; j++) {
+        // mx_printint(lattrib[j]->bl);
+        // mx_printchar('\t');
+
         mx_printchar(lattrib[j]->ftype);
         mx_printstr(lattrib[j]->rights);
         mx_printchar(' ');
@@ -60,11 +64,23 @@ static void one_obj(char *obj, t_flags *flags, t_lattrib **lattrib) {
         mx_printint(lattrib[j]->size);
         mx_printchar('\t');
         mx_printstr(lattrib[j]->time);
-        // mx_printchar('\t');
-        // mx_printstr(lattrib[j]->name);
-        // mx_printchar('\n');
+        mx_printchar('\t');
+        mx_printstr(lattrib[j]->name);
+        mx_printchar('\n');
     }
 }
+
+static void total_blocks(t_flags *flags, t_lattrib **lattrib) {
+    int bl_sum = 0;
+    for (int i = 0; i < flags->count_obj; i++) {
+        bl_sum += lattrib[i]->bl;
+    }
+    mx_printstr("total ");
+    mx_printint(bl_sum);
+    mx_printchar('\n');
+}
+
+
 
 // // id flag -i
 //             lattrib->id = mx_strdup(dir->d_ino);

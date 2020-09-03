@@ -11,10 +11,19 @@
 #include <pwd.h>
 #include <time.h>
 
-#define INVALID_USAGE "usage: uls [-ali] [file ...]"
-#define ILLEGAL_OPT "uls: illegal option -- "
+#define INVALID_USAGE   "usage: uls [-ali] [file ...]"
+#define ILLEGAL_OPT     "uls: illegal option -- "
 
-#define FLAGS "a l i \0"
+#define FLAGS   "a l i \0"
+
+#define RED     "\x1B[31m"
+#define GRN     "\x1B[32m"
+#define YEL     "\x1B[33m"
+#define BLU     "\x1B[34m"
+#define MAG     "\x1B[35m"
+#define CYN     "\x1B[36m"
+#define WHT     "\x1B[37m"
+#define RESET   "\x1B[0m"
 
 typedef struct s_flags {
     int argc;
@@ -56,13 +65,14 @@ void mx_struct_sort(t_lattrib **lattrib, t_flags *flags);
 void mx_error_illegal_option(t_flags *flags);
 void mx_no_file_dir(char *fd);
 
-void mx_print_root_files(t_flags *flags);
-
 // flags
 void mx_flag_l(t_flags *flags, t_sorted_odj *sort);
 void mx_specify_type_file(struct stat sb, t_lattrib **lattrib, int i);
 void mx_print_permissions_list(t_lattrib **lattrib, struct stat sb, int i);
 void mx_time_modif(struct stat sb, t_lattrib **lattrib, int i);
+
+// print output
+void mx_print_root_files(t_flags *flags);
 
 void mx_flag_a(t_flags *flags);
 void mx_flag_i(t_flags *flags, t_sorted_odj *sort);
