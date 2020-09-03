@@ -6,6 +6,7 @@
 #include <sys/stat.h>
 #include <sys/ioctl.h>
 #include <sys/xattr.h>
+#include <sys/acl.h>
 #include <dirent.h>
 #include <unistd.h>
 #include <pwd.h>
@@ -33,6 +34,7 @@ typedef struct s_flags {
     char **all_obj; // dir and files
     int fi; // flag index
     int count_obj; // number of objects from argv
+    int num_dir_file; // number of files and dirs from root
 }       t_flags;
 
 typedef struct s_lattrib {

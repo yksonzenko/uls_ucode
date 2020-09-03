@@ -6,7 +6,7 @@ void mx_cleaner(t_flags *flags, t_lattrib **lattrib) {
         mx_del_strarr(&flags->all_obj);
     }
     if (lattrib) {
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < flags->num_dir_file; i++) {
             mx_strdel(&lattrib[i]->rights);
             mx_strdel(&lattrib[i]->user);
             mx_strdel(&lattrib[i]->time);

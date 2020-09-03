@@ -2,10 +2,13 @@
 
 static void one_obj(char *obj, t_flags *flags, t_lattrib **lattrib);
 static void total_blocks(t_flags *flags, t_lattrib **lattrib);
+static void get_attributes(t_lattrib **lattrib, struct stat sb, int i,
+                            struct dirent *dir);
 
 t_lattrib **mx_flag_l(t_flags *flags, t_sorted_odj *sort) {
-    t_lattrib **lattrib = (t_lattrib **)malloc(sizeof(t_lattrib *) * 1000);
-    for (int i = 0; i < 1000; i++) {
+    t_lattrib **lattrib = (t_lattrib **)malloc(sizeof(t_lattrib *) *
+                            flags->num_dir_file);
+    for (int i = 0; i < flags->num_dir_file; i++) {
         lattrib[i] = malloc(sizeof(t_lattrib));
     }
     if (flags->count_obj == 0) {
@@ -18,7 +21,6 @@ static void one_obj(char *obj, t_flags *flags, t_lattrib **lattrib) {
     DIR *d;
     struct stat sb;
     struct dirent *dir;
-    struct passwd *passwd; // get username
     int i = 0;
 
     d = opendir(obj);
@@ -27,26 +29,17 @@ static void one_obj(char *obj, t_flags *flags, t_lattrib **lattrib) {
                 flags->count_obj++;
     closedir(d);
     d = opendir(obj);
-
     while ((dir = readdir(d)) != NULL) {
         if (dir->d_name[0] != '.') {
             lattrib[i]->name = mx_strdup(dir->d_name);
             stat(lattrib[i]->name, &sb);
-            mx_specify_type_file(sb, lattrib, i);
-            mx_print_permissions_list(lattrib, sb, i);
-            lattrib[i]->links = sb.st_nlink;
-            passwd = getpwuid(sb.st_uid);
-            lattrib[i]->user = mx_strdup(passwd->pw_name);
-            lattrib[i]->group = sb.st_gid;
-            lattrib[i]->size = sb.st_size;
-            mx_time_modif(sb, lattrib, i);
-            lattrib[i]->bl = sb.st_blocks;
+            get_attributes(lattrib, sb, i, dir);
             i++;
         }
     }
     closedir(d);
-// ./uls -l print output
     mx_struct_sort(lattrib, flags);
+// ./uls -l print output
     total_blocks(flags, lattrib);
     for (int j = 0; j < flags->count_obj; j++) {
         // mx_printint(lattrib[j]->bl);
@@ -69,6 +62,26 @@ static void one_obj(char *obj, t_flags *flags, t_lattrib **lattrib) {
         mx_printstr(lattrib[j]->name);
         mx_printchar('\n');
     }
+    // acl_t acl = NULL;
+    // acl_entry_t dummy;
+    // ssize_t xattr = 0;
+    // char chr;
+    // char * filename = "/Users/john/desktop/mutations.txt";
+    // acl = acl_get_link_np(filename, ACL_TYPE_EXTENDED);
+    // if (acl && acl_get_entry(acl, ACL_FIRST_ENTRY, &dummy) == -1) {
+    //     acl_free(acl);
+    //     acl = NULL;
+    // }
+    // xattr = listxattr(filename, NULL, 0, XATTR_NOFOLLOW);
+    // if (xattr < 0)
+    //     xattr = 0;
+    // if (xattr > 0)
+    //     chr = '@';
+    // else if (acl != NULL)
+    //     chr = '+';
+    // else
+    //     chr = ' ';
+    // printf("%c\n", chr);
 }
 
 static void total_blocks(t_flags *flags, t_lattrib **lattrib) {
@@ -81,6 +94,20 @@ static void total_blocks(t_flags *flags, t_lattrib **lattrib) {
     mx_printchar('\n');
 }
 
+static void get_attributes(t_lattrib **lattrib, struct stat sb, int i,
+                            struct dirent *dir) {
+    struct passwd *passwd; // get username
+
+    mx_specify_type_file(sb, lattrib, i);
+    mx_print_permissions_list(lattrib, sb, i);
+    lattrib[i]->links = sb.st_nlink;
+    passwd = getpwuid(sb.st_uid);
+    lattrib[i]->user = mx_strdup(passwd->pw_name);
+    lattrib[i]->group = sb.st_gid;
+    lattrib[i]->size = sb.st_size;
+    mx_time_modif(sb, lattrib, i);
+    lattrib[i]->bl = sb.st_blocks;
+}
 
 
 // // id flag -i

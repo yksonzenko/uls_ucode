@@ -7,11 +7,18 @@ int main(int argc, char **argv) {
     flags->argv = argv;
     DIR *d;
     struct dirent *dir;
+    flags->num_dir_file = 0;
+
+    d = opendir(".");
+        while ((dir = readdir(d)) != NULL)
+            if (dir->d_name[0] != '.')
+                flags->num_dir_file++;
+    closedir(d);
+    d = opendir(".");
 
 // check illegal flags
     mx_error_illegal_option(flags);
 // if just ./uls
-    d = opendir(".");
     if (flags->argc == 1)
         mx_print_root_files(flags);
 // if ./uls + flags(-i -l -la ...)

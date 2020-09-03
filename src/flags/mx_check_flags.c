@@ -33,7 +33,7 @@ void mx_check_flags(t_flags *flags, t_sorted_odj *sort) {
         if (flags->argv[k][0] == '-' && flags->argv[k][1] == '-' &&
             !flags->argv[k][2]) {
             k += 1;
-            if (flags->count_obj == 0 && flags->argc == 2)
+            if (flags->argc == 2)
                 mx_print_root_files(flags);
             store_all_obj_array(flags, k);
             // printf("OBJ_COUNT: %d\n", flags->count_obj);
@@ -51,7 +51,6 @@ void mx_check_flags(t_flags *flags, t_sorted_odj *sort) {
 
 static void store_all_obj_array(t_flags *flags, int k) {
     for (int i = 0; flags->argv[k]; i++, k++) {
-        //flags->all_obj[i] = flags->argv[k];
         flags->all_obj[i] = mx_strdup(flags->argv[k]);
         flags->count_obj++;
     }
