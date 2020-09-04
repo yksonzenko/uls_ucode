@@ -1,9 +1,10 @@
 #include "yksuls.h"
 
 static void one_obj(char *obj, t_flags *flags, t_lattrib **lattrib);
-static void total_blocks(t_flags *flags, t_lattrib **lattrib);
 static void get_attributes(t_lattrib **lattrib, struct stat sb, int i,
                             struct dirent *dir);
+static void get_acl_xattr(t_lattrib **lattrib, int i);
+static void total_blocks(t_flags *flags, t_lattrib **lattrib);
 
 t_lattrib **mx_flag_l(t_flags *flags, t_sorted_odj *sort) {
     t_lattrib **lattrib = (t_lattrib **)malloc(sizeof(t_lattrib *) *
@@ -29,59 +30,62 @@ static void one_obj(char *obj, t_flags *flags, t_lattrib **lattrib) {
                 flags->count_obj++;
     closedir(d);
     d = opendir(obj);
-    while ((dir = readdir(d)) != NULL) {
+    while ((dir = readdir(d)) != NULL)
         if (dir->d_name[0] != '.') {
             lattrib[i]->name = mx_strdup(dir->d_name);
             stat(lattrib[i]->name, &sb);
             get_attributes(lattrib, sb, i, dir);
+            get_acl_xattr(lattrib, i);
             i++;
         }
-    }
     closedir(d);
     mx_struct_sort(lattrib, flags);
 // ./uls -l print output
     total_blocks(flags, lattrib);
-    for (int j = 0; j < flags->count_obj; j++) {
-        // mx_printint(lattrib[j]->bl);
-        // mx_printchar('\t');
+    if (flags->switch_flags[1] == 1 && flags->switch_flags[2] == 1)
+        mx_print_li_flag(flags, lattrib);
+    if (flags->switch_flags[0] == 0 && flags->switch_flags[1] == 1 &&
+        flags->switch_flags[2] == 0)
+        mx_print_l_flag(flags, lattrib);
+}
 
-        mx_printchar(lattrib[j]->ftype);
-        mx_printstr(lattrib[j]->rights);
-        mx_printchar(' ');
+static void get_attributes(t_lattrib **lattrib, struct stat sb, int i,
+                            struct dirent *dir) {
+    struct passwd *passwd; // get username
 
-        mx_printint(lattrib[j]->links);
-        mx_printchar('\t');
-        mx_printstr(lattrib[j]->user);
-        mx_printchar('\t');
-        mx_printint(lattrib[j]->group);
-        mx_printchar('\t');
-        mx_printint(lattrib[j]->size);
-        mx_printchar('\t');
-        mx_printstr(lattrib[j]->time);
-        mx_printchar('\t');
-        mx_printstr(lattrib[j]->name);
-        mx_printchar('\n');
+    mx_specify_type_file(sb, lattrib, i);
+    mx_print_permissions_list(lattrib, sb, i);
+    lattrib[i]->id = sb.st_ino;
+    lattrib[i]->links = sb.st_nlink;
+    passwd = getpwuid(sb.st_uid);
+    lattrib[i]->user = mx_strdup(passwd->pw_name);
+    lattrib[i]->group = sb.st_gid;
+    lattrib[i]->size = sb.st_size;
+    mx_time_modif(sb, lattrib, i);
+    lattrib[i]->bl = sb.st_blocks;
+}
+
+static void get_acl_xattr(t_lattrib **lattrib, int i) {
+    acl_t acl = NULL;
+    acl_entry_t dummy;
+    ssize_t xattr = 0;
+    char acl_xattr;
+
+    acl = acl_get_link_np(lattrib[i]->name, ACL_TYPE_EXTENDED);
+    if (acl && acl_get_entry(acl, ACL_FIRST_ENTRY, &dummy) == -1) {
+        acl_free(acl);
+        acl = NULL;
     }
-    // acl_t acl = NULL;
-    // acl_entry_t dummy;
-    // ssize_t xattr = 0;
-    // char chr;
-    // char * filename = "/Users/john/desktop/mutations.txt";
-    // acl = acl_get_link_np(filename, ACL_TYPE_EXTENDED);
-    // if (acl && acl_get_entry(acl, ACL_FIRST_ENTRY, &dummy) == -1) {
-    //     acl_free(acl);
-    //     acl = NULL;
-    // }
-    // xattr = listxattr(filename, NULL, 0, XATTR_NOFOLLOW);
-    // if (xattr < 0)
-    //     xattr = 0;
-    // if (xattr > 0)
-    //     chr = '@';
-    // else if (acl != NULL)
-    //     chr = '+';
-    // else
-    //     chr = ' ';
-    // printf("%c\n", chr);
+    xattr = listxattr(lattrib[i]->name, NULL, 0, XATTR_NOFOLLOW);
+    if (xattr < 0)
+        xattr = 0;
+    if (xattr > 0)
+        acl_xattr = '@';
+    else if (acl != NULL)
+        acl_xattr = '+';
+    else
+        acl_xattr = ' ';
+    lattrib[i]->rights[9] = acl_xattr;
 }
 
 static void total_blocks(t_flags *flags, t_lattrib **lattrib) {
@@ -93,54 +97,3 @@ static void total_blocks(t_flags *flags, t_lattrib **lattrib) {
     mx_printint(bl_sum);
     mx_printchar('\n');
 }
-
-static void get_attributes(t_lattrib **lattrib, struct stat sb, int i,
-                            struct dirent *dir) {
-    struct passwd *passwd; // get username
-
-    mx_specify_type_file(sb, lattrib, i);
-    mx_print_permissions_list(lattrib, sb, i);
-    lattrib[i]->links = sb.st_nlink;
-    passwd = getpwuid(sb.st_uid);
-    lattrib[i]->user = mx_strdup(passwd->pw_name);
-    lattrib[i]->group = sb.st_gid;
-    lattrib[i]->size = sb.st_size;
-    mx_time_modif(sb, lattrib, i);
-    lattrib[i]->bl = sb.st_blocks;
-}
-
-
-// // id flag -i
-//             lattrib->id = mx_strdup(dir->d_ino);
-//             mx_printint(lattrib->id);
-//             // mx_printint(dir->d_ino);
-//             mx_printchar('\t');
-// // bl flag -s
-//             mx_printint(sb.st_blocks);
-//             mx_printchar(' ');
-// // rights
-//             mx_specify_type_file(sb);
-//             mx_print_permissions_list(lattrib, sb);
-// // end rights
-//             char buff[100];
-//             ssize_t lxattr = listxattr(string, buff, 100, 0);
-//             if (lxattr > 0)
-//                 mx_printchar('@');
-//             mx_printchar('\t');
-//             // ssize_t gxattr = getxattr();
-//             mx_printint(sb.st_nlink);
-//             mx_printchar('\t');
-//             struct passwd *pwd;
-//             pwd = getpwuid(sb.st_uid);
-//             mx_printstr(pwd->pw_name);
-//             mx_printchar('\t');
-//             mx_printint(sb.st_gid);
-//             mx_printchar('\t');
-//             mx_printint(sb.st_size);
-//             mx_printchar('\t');
-            // char *time = ctime(&sb.st_mtime);
-//             time[mx_strlen(time) - 1] = '\0';
-//             mx_printstr(time);
-//             mx_printchar('\t');
-//             mx_printstr(dir->d_name);
-//             mx_printchar('\n');

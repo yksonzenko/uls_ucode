@@ -17,5 +17,7 @@ void mx_check_and_connect_flags(t_flags *flags, t_sorted_odj *sort) {
 // flags -a and -l
     if (flags->switch_flags[0] == 1 && flags->switch_flags[1] == 1)
         mx_flag_a_l(flags);
-    mx_cleaner(flags, lattrib); // delete struct
+    if (flags->switch_flags[1] == 1 && flags->switch_flags[2] == 1)
+        mx_flag_l(flags, sort);
+    // mx_cleaner(flags, lattrib); // delete struct
 }

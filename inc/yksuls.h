@@ -48,6 +48,7 @@ typedef struct s_lattrib {
     int size;
     char *time;
     char *name;
+    char *size_str;
 }       t_lattrib;
 
 typedef struct s_sorted_obj {
@@ -62,6 +63,8 @@ void mx_cleaner(t_flags *flags, t_lattrib **lattrib);
 
 //additional
 void mx_struct_sort(t_lattrib **lattrib, t_flags *flags);
+int mx_max_len_of_size(t_lattrib **lattrib, t_flags *flags);
+void mx_size_align_right(t_lattrib **lattrib, t_flags *flags);
 
 // errors
 void mx_error_illegal_option(t_flags *flags);
@@ -76,6 +79,8 @@ void mx_check_and_connect_flags(t_flags *flags, t_sorted_odj *sort);
 
 // print output
 void mx_print_root_files(t_flags *flags);
+void mx_print_l_flag(t_flags *flags, t_lattrib **lattrib);
+void mx_print_li_flag(t_flags *flags, t_lattrib **lattrib);
 
 void mx_flag_a(t_flags *flags);
 void mx_flag_i(t_flags *flags, t_sorted_odj *sort);

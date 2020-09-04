@@ -11,6 +11,7 @@ void mx_cleaner(t_flags *flags, t_lattrib **lattrib) {
             mx_strdel(&lattrib[i]->user);
             mx_strdel(&lattrib[i]->time);
             mx_strdel(&lattrib[i]->name);
+            mx_strdel(&lattrib[i]->size_str);
             free(lattrib[i]);
         }
         free(lattrib);
