@@ -87,5 +87,6 @@ int mx_intlen(int n);
 void mx_print_intarr(int **arr, int len);
 void mx_del_intarr(int **arr, int len);
 char *mx_strchr(const char *s, int c);
+bool mx_in_alphabet(char a);
 
 #endif

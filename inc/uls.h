@@ -1,5 +1,5 @@
-#ifndef YKSULS_H
-#define YKSULS_H
+#ifndef ULS_H
+#define ULS_H
 
 #include "libmx.h"
 #include <sys/types.h>
@@ -26,6 +26,13 @@
 #define WHT     "\x1B[37m"
 #define RESET   "\x1B[0m"
 
+typedef struct s_sorted_obj {
+    char **files;
+    char **dirs;
+    int len_of_files_array;
+    int len_of_dirs_array;
+}              t_sorted_odj;
+
 typedef struct s_flags {
     int argc;
     char **argv;
@@ -35,6 +42,7 @@ typedef struct s_flags {
     int fi; // flag index
     int count_obj; // number of objects from argv
     int num_dir_file; // number of files and dirs from root
+    int number_of_obj;
 }       t_flags;
 
 typedef struct s_lattrib {
@@ -49,15 +57,12 @@ typedef struct s_lattrib {
     char *time;
     char *name;
     char *size_str;
+    char *size_with_type;
 }       t_lattrib;
 
-typedef struct s_sorted_obj {
-    char **files;
-    char **dirs;
-    int len_of_files_array;
-    int len_of_dirs_array;
-}              t_sorted_odj;
-
+/*
+ * yksonzenko function
+ */
 void mx_check_flags(t_flags *flags, t_sorted_odj *sort);
 void mx_cleaner(t_flags *flags, t_lattrib **lattrib);
 
@@ -83,12 +88,27 @@ void mx_print_l_flag(t_flags *flags, t_lattrib **lattrib);
 void mx_print_li_flag(t_flags *flags, t_lattrib **lattrib);
 
 void mx_flag_a(t_flags *flags);
-void mx_flag_i(t_flags *flags, t_sorted_odj *sort);
 void mx_flag_a_l(t_flags *flags);
 
-// ilay
+
+/*
+ * imarchenko function
+ */
+
+void mx_flag_p(t_flags *flags);
+void mx_flag_h(t_lattrib **lattrib, t_flags *flags);
+
+void mx_output_in_one_column(char **array, int len_of_array);
 void mx_output_by_size_of_wind(char **array, int len_of_array);
+
+void mx_alphabet_sort(char **array, int len);
 void mx_alphabet_sort2(char **array, int len);
+
 int mx_the_biggest_name(char **array, int len);
+int mx_max_len_of_inode(char *obj);
+void mx_file_dir_sort(t_sorted_odj *sort, t_flags *flags);
+void ftoa(float n, char *res, int afterpoint);
+char *mx_convert_bytes(int size);
+
 
 #endif

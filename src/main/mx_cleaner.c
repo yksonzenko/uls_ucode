@@ -1,4 +1,4 @@
-#include "yksuls.h"
+#include "uls.h"
 
 void mx_cleaner(t_flags *flags, t_lattrib **lattrib) {
     if (flags->all_obj) {
@@ -11,7 +11,10 @@ void mx_cleaner(t_flags *flags, t_lattrib **lattrib) {
             mx_strdel(&lattrib[i]->user);
             mx_strdel(&lattrib[i]->time);
             mx_strdel(&lattrib[i]->name);
-            mx_strdel(&lattrib[i]->size_str);
+            if (lattrib[i]->size_str)
+                mx_strdel(&lattrib[i]->size_str);
+            if (lattrib[i]->size_with_type)
+                mx_strdel(&lattrib[i]->size_with_type);
             free(lattrib[i]);
         }
         free(lattrib);

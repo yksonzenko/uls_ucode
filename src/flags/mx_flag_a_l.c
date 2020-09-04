@@ -1,4 +1,4 @@
-#include "yksuls.h"
+#include "uls.h"
 
 void mx_flag_a_l(t_flags *flags) {
     printf("FLAG -a and -l FUNCTION\n");
