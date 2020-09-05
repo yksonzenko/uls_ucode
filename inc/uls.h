@@ -12,10 +12,10 @@
 #include <pwd.h>
 #include <time.h>
 
-#define INVALID_USAGE   "usage: uls [-ali] [file ...]"
+#define INVALID_USAGE   "usage: uls [-alihp] [file ...]"
 #define ILLEGAL_OPT     "uls: illegal option -- "
 
-#define FLAGS   "a l i \0"
+#define FLAGS   "a l i h p \0"
 
 #define RED     "\x1B[31m"
 #define GRN     "\x1B[32m"
@@ -84,8 +84,9 @@ void mx_check_and_connect_flags(t_flags *flags, t_sorted_odj *sort);
 
 // print output
 void mx_print_root_files(t_flags *flags);
-void mx_print_l_flag(t_flags *flags, t_lattrib **lattrib);
-void mx_print_li_flag(t_flags *flags, t_lattrib **lattrib);
+void mx_print_l_flag(t_lattrib **lattrib, t_flags *flags);
+void mx_print_li_flag(t_lattrib **lattrib, t_flags *flags);
+void mx_print_lh_flag(t_lattrib **lattrib, t_flags *flags);
 
 void mx_flag_a(t_flags *flags);
 void mx_flag_a_l(t_flags *flags);
@@ -94,7 +95,7 @@ void mx_flag_a_l(t_flags *flags);
 /*
  * imarchenko function
  */
-
+void mx_flag_i(t_flags *flags);
 void mx_flag_p(t_flags *flags);
 void mx_flag_h(t_lattrib **lattrib, t_flags *flags);
 

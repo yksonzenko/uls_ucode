@@ -14,7 +14,7 @@ static void illegal_opt_print(char fl) {
 }
 
 void mx_error_illegal_option(t_flags *flags) {
-    char our_flags[4] = "ali";
+    char our_flags[6] = "alihp";
 
     for (int i = 1; i < flags->argc; i++)
         if ((flags->argv[i][0] == '-' && flags->argv[i][1] != '-') ||

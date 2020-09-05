@@ -1,6 +1,6 @@
 #include "uls.h"
 
-void mx_print_l_flag(t_flags *flags, t_lattrib **lattrib) {
+void mx_print_l_flag(t_lattrib **lattrib, t_flags *flags) {
     mx_size_align_right(lattrib, flags);
     for (int j = 0; j < flags->count_obj; j++) {
         mx_printchar(lattrib[j]->ftype);

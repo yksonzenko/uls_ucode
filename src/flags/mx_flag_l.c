@@ -42,11 +42,14 @@ static void one_obj(char *obj, t_flags *flags, t_lattrib **lattrib) {
     mx_struct_sort(lattrib, flags);
 // ./uls -l print output
     total_blocks(flags, lattrib);
-    if (flags->switch_flags[1] == 1 && flags->switch_flags[2] == 1)
-        mx_print_li_flag(flags, lattrib);
     if (flags->switch_flags[0] == 0 && flags->switch_flags[1] == 1 &&
-        flags->switch_flags[2] == 0)
-        mx_print_l_flag(flags, lattrib);
+        flags->switch_flags[2] == 1 && flags->switch_flags[3] == 0 &&
+        flags->switch_flags[4] == 0)
+        mx_print_li_flag(lattrib, flags);
+    if (flags->switch_flags[0] == 0 && flags->switch_flags[1] == 1 &&
+        flags->switch_flags[2] == 0 && flags->switch_flags[3] == 0 &&
+        flags->switch_flags[4] == 0)
+        mx_print_l_flag(lattrib, flags);
 }
 
 static void get_attributes(t_lattrib **lattrib, struct stat sb, int i,

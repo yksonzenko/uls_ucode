@@ -24,5 +24,5 @@ int main(int argc, char **argv) {
 // if ./uls + flags(-i -l -la ...)
     mx_check_flags(flags, sort);
     mx_check_and_connect_flags(flags, sort);
-    system("leaks -q uls");
+    // system("leaks -q uls");
 }

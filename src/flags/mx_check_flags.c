@@ -5,10 +5,10 @@ static void store_all_obj_array(t_flags *flags, int k);
 // searching for flags
 void mx_check_flags(t_flags *flags, t_sorted_odj *sort) {
     flags->count_obj = 0;
-    flags->switch_flags = (int *)malloc(sizeof(int) * 3);
+    flags->switch_flags = (int *)malloc(sizeof(int) * 5);
     flags->all_obj = (char **)malloc(sizeof(char *) * 1000);
 
-    for (int i = 0; i < 3; i++)
+    for (int i = 0; i < 5; i++)
         flags->switch_flags[i] = 0;
     flags->all_flags = mx_strsplit(FLAGS, ' ');
     for (int k = 1; k < flags->argc; k++) {
@@ -42,10 +42,12 @@ void mx_check_flags(t_flags *flags, t_sorted_odj *sort) {
         }
     }
 // -----------
-        // printf("\n--switch_flags--\n");
-        // printf("%d\t", flags->switch_flags[0]);
-        // printf("%d\t", flags->switch_flags[1]);
-        // printf("%d\t\n\n", flags->switch_flags[2]);
+        printf("\n--switch_flags--\n");
+        printf("%d\t", flags->switch_flags[0]);
+        printf("%d\t", flags->switch_flags[1]);
+        printf("%d\t", flags->switch_flags[2]);
+        printf("%d\t", flags->switch_flags[3]);
+        printf("%d\t\n\n", flags->switch_flags[4]);
 // -----------
 }
 

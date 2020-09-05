@@ -7,15 +7,20 @@ void mx_cleaner(t_flags *flags, t_lattrib **lattrib) {
     }
     if (lattrib) {
         for (int i = 0; i < flags->num_dir_file; i++) {
-            mx_strdel(&lattrib[i]->rights);
-            mx_strdel(&lattrib[i]->user);
-            mx_strdel(&lattrib[i]->time);
-            mx_strdel(&lattrib[i]->name);
+            if (lattrib[i]->rights)
+                mx_strdel(&lattrib[i]->rights);
+            if (lattrib[i]->user)
+                mx_strdel(&lattrib[i]->user);
+            if (lattrib[i]->time)
+                mx_strdel(&lattrib[i]->time);
+            if (lattrib[i]->name)
+                mx_strdel(&lattrib[i]->name);
             if (lattrib[i]->size_str)
                 mx_strdel(&lattrib[i]->size_str);
             if (lattrib[i]->size_with_type)
                 mx_strdel(&lattrib[i]->size_with_type);
-            free(lattrib[i]);
+            if (lattrib[i])
+                free(lattrib[i]);
         }
         free(lattrib);
     }
