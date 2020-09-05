@@ -5,14 +5,14 @@ void mx_print_root_files(t_flags *flags) {
     DIR *d;
     struct dirent *dir;
 
-    d = opendir(".");
-        if (d) {
-            while ((dir = readdir(d)) != NULL)
-                if (dir->d_name[0] != '.')
-                    flags->count_obj++;
-        }
-    closedir(d);
-
+    if (flags->argc == 1) {
+        d = opendir(".");
+            if (d) {
+                while ((dir = readdir(d)) != NULL)
+                    if (dir->d_name[0] != '.')
+                        flags->count_obj++;
+            }
+        closedir(d);
     d = opendir(".");
     int i = 0;
     flags->all_obj = (char **)malloc(sizeof(char *) * flags->count_obj + 1);
@@ -24,12 +24,16 @@ void mx_print_root_files(t_flags *flags) {
         }
     flags->all_obj[i] = NULL;
     mx_bubble_sort(flags->all_obj, flags->count_obj);
-    mx_output_by_size_of_wind(flags->all_obj, flags->count_obj);
-    // mx_print_strarr(flags->all_obj, "\t"); // TODO change function for output
-    mx_printchar('\n');
+    if (flags->switch_flags[5] != 1) {
+        mx_output_by_size_of_wind(flags->all_obj, flags->count_obj);
+    }
+    else {
+        mx_output_in_one_column(flags->all_obj, flags->count_obj);
+    }
     if (flags->all_obj) {
         mx_strdel(&flags->all_obj[999]);
         mx_del_strarr(&flags->all_obj);
     }
     closedir(d);
+    }
 }

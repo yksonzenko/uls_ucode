@@ -1,31 +1,40 @@
 #include "uls.h"
 
-static void one_obj(char *obj);
+static t_result *one_obj(char *obj);
 static char *trim(char *string, char **current_file);
 static void add_inode_to_name_of_file(t_sorted_odj *sort);
 static void two_and_more_obj(t_flags *flags);
 
-void mx_flag_i(t_flags *flags) {
-    if (flags->number_of_obj == 0) {
-        one_obj(".");
+t_result *mx_flag_s(t_flags *flags, char *object) {
+    t_result *struct_result = NULL;
+    flags->number_of_obj = flags->count_obj;
+    if (flags->number_of_obj == 0 && !object) {
+        struct_result = one_obj(".");
     }
-    else if (flags->number_of_obj == 1) {
+    else if (flags->number_of_obj == 1 && !object) {
         two_and_more_obj(flags);
     }
-    else if (flags->number_of_obj > 1) {
+    else if (flags->number_of_obj == 1 || object) {
+        struct_result = one_obj(object);
+    }
+    else if (flags->number_of_obj > 1 && !object) {
         two_and_more_obj(flags);
     }
+    return struct_result;
 }
 
-static void one_obj(char *obj) {
+static t_result *one_obj(char *obj) {
+    t_result *struct_result = (t_result *)malloc(sizeof(t_result));
+    t_lattrib **lattrib = NULL;
+    t_flags *flags = NULL;
     int len_of_array = 0;
-    int max_len_of_inode;
     int temp;
     int i = 0;
-    char *inode;
+    char *size_blocks;
     char **array = NULL;
     DIR *d;
     struct dirent *directory;
+    struct stat sb;
     d = opendir(obj);
     if (d) {
         while ((directory = readdir(d)) != NULL) {
@@ -34,41 +43,25 @@ static void one_obj(char *obj) {
             }
         }
         closedir(d);
-        max_len_of_inode = mx_max_len_of_inode(obj);
         d = opendir(obj);
         array = (char **)malloc(sizeof(char *) * len_of_array);
         while ((directory = readdir(d)) != NULL) {
             if (directory->d_name[0] != '.') {
-                temp = max_len_of_inode - mx_intlen(directory->d_ino);
-                array[i] = mx_strnew(directory->d_namlen + max_len_of_inode + 1);
-                if (temp != 0) {
-                    for (int j = 0; j < temp; ++j) {
-                        if (j == 0) {
-                            array[i] = mx_strcpy(array[i], " ");
-                        }
-                        else {
-                            array[i] = mx_strcat(array[i], " ");
-                        }
-                    }
-                    inode = mx_itoa(directory->d_ino);
-                    array[i] = mx_strcat(array[i], inode);
-                }
-                else {
-                    inode = mx_itoa(directory->d_ino);
-                    array[i] = mx_strcpy(array[i], inode);
-                }
-                array[i] = mx_strcat(array[i], " ");
-                array[i] = mx_strcat(array[i], directory->d_name);
-                i++;
-                mx_strdel(&inode);
+                mx_size_align_right(lattrib, flags);
             }
         }
         closedir(d);
-        mx_alphabet_sort2(array, len_of_array);
-        mx_output_by_size_of_wind(array, len_of_array);
+        //mx_alphabet_sort2(array, len_of_array);
+        //mx_output_by_size_of_wind(array, len_of_array);
+        struct_result->result = (char **)malloc(sizeof(char *) * len_of_array);
+        for (int k = 0; k < len_of_array; ++k) {
+            struct_result->result[k] = mx_strdup(array[k]);
+        }
+        struct_result->length = len_of_array;
         mx_strdel(&array[len_of_array - 1]);
         mx_del_strarr(&array);
     }
+    return struct_result;
 }
 
 static char *trim(char *string, char **current_file) {
@@ -105,9 +98,11 @@ static char *trim(char *string, char **current_file) {
 }
 
 static void two_and_more_obj(t_flags *flags) {
+    t_result *struct_result = NULL;
     t_sorted_odj *sort = (t_sorted_odj *)malloc(sizeof(t_sorted_odj));
     sort->len_of_dirs_array = sort->len_of_files_array = 0;
     mx_file_dir_sort(sort, flags);
+    char **array = NULL;
     if (sort->len_of_files_array != 0) {
         mx_alphabet_sort(sort->files, sort->len_of_files_array);
         add_inode_to_name_of_file(sort);
@@ -119,11 +114,21 @@ static void two_and_more_obj(t_flags *flags) {
         mx_output_by_size_of_wind(sort->files, sort->len_of_files_array);
     }
     for (int j = 0; j < sort->len_of_dirs_array; ++j) {
-        if (j != 0 || sort->len_of_files_array != 0)
-            mx_printchar('\n');
-        mx_printstr(sort->dirs[j]);
-        mx_printstr(":\n");
-        one_obj(sort->dirs[j]);
+        if (flags->number_of_obj != 1) {
+            if (j != 0 || sort->len_of_files_array != 0)
+                mx_printchar('\n');
+            mx_printstr(sort->dirs[j]);
+            mx_printstr(":\n");
+        }
+        struct_result = one_obj(sort->dirs[j]);
+        mx_output_by_size_of_wind(struct_result->result, struct_result->length);
+        for (int i = 0; i < struct_result->length; ++i) {
+            mx_strdel(&struct_result->result[i]);
+        }
+        if (struct_result->result)
+            free(struct_result->result);
+        if (struct_result)
+            free(struct_result);
     }
     mx_del_strarr(&sort->files);
     mx_del_strarr(&sort->dirs);

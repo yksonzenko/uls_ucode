@@ -12,10 +12,10 @@
 #include <pwd.h>
 #include <time.h>
 
-#define INVALID_USAGE   "usage: uls [-alihp] [file ...]"
+#define INVALID_USAGE   "usage: uls [-alihp1Ar] [file ...]"
 #define ILLEGAL_OPT     "uls: illegal option -- "
 
-#define FLAGS   "a l i h p \0"
+#define FLAGS   "a l i h p 1 A r s \0"
 
 #define RED     "\x1B[31m"
 #define GRN     "\x1B[32m"
@@ -60,11 +60,17 @@ typedef struct s_lattrib {
     char *size_with_type;
 }       t_lattrib;
 
+typedef struct s_result {
+    char **result;
+    int length;
+}              t_result;
+
 /*
  * yksonzenko function
  */
 void mx_check_flags(t_flags *flags, t_sorted_odj *sort);
 void mx_cleaner(t_flags *flags, t_lattrib **lattrib);
+void mx_clean_struct_result(t_result *result_of_work_i);
 
 //additional
 void mx_struct_sort(t_lattrib **lattrib, t_flags *flags);
@@ -95,7 +101,6 @@ void mx_flag_a_l(t_flags *flags);
 /*
  * imarchenko function
  */
-void mx_flag_i(t_flags *flags);
 void mx_flag_p(t_flags *flags);
 void mx_flag_h(t_lattrib **lattrib, t_flags *flags);
 

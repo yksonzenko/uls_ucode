@@ -18,11 +18,11 @@ int main(int argc, char **argv) {
 
 // check illegal flags
     mx_error_illegal_option(flags);
-// if just ./uls
-    if (flags->argc == 1)
-        mx_print_root_files(flags);
 // if ./uls + flags(-i -l -la ...)
     mx_check_flags(flags, sort);
+// if just ./uls
+    // if (flags->argc == 1)
+        mx_print_root_files(flags);
     mx_check_and_connect_flags(flags, sort);
     // system("leaks -q uls");
 }
