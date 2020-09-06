@@ -6,9 +6,9 @@ void mx_file_dir_sort(t_sorted_odj *sort, t_flags *flags) {
     int c = 0;
     int d = 0;
     DIR *dir;
-    sort->files = (char **)malloc(sizeof(char *) * flags->number_of_obj + 1); // NO
-    sort->dirs = (char **)malloc(sizeof(char *) * flags->number_of_obj + 1); // NO
-    for (int i = 0; i < flags->number_of_obj; i++) {
+    sort->files = (char **)malloc(sizeof(char *) * flags->num_dir_file + 1); // NO
+    sort->dirs = (char **)malloc(sizeof(char *) * flags->num_dir_file + 1); // NO
+    for (int i = 0; i < flags->num_dir_file; i++) {
         if ((dir = opendir(flags->all_obj[i]))) {
             sort->dirs[a] = mx_strdup(flags->all_obj[i]);
             a++;
@@ -18,10 +18,10 @@ void mx_file_dir_sort(t_sorted_odj *sort, t_flags *flags) {
             b++;
         }
     }
-    for (int j = a; j < flags->number_of_obj + 1; ++j) {
+    for (int j = a; j < flags->num_dir_file + 1; ++j) {
         sort->dirs[a] = NULL;
     }
-    for (int j = b; j < flags->number_of_obj + 1; ++j) {
+    for (int j = b; j < flags->num_dir_file + 1; ++j) {
         sort->files[b] = NULL;
     }
     while (sort->dirs[c] != NULL) {

@@ -38,6 +38,7 @@ typedef struct s_flags {
     char **argv;
     char **all_flags;
     int *switch_flags;
+    int count_flags;
     char **all_obj; // dir and files
     int fi; // flag index
     int count_obj; // number of objects from argv
@@ -87,12 +88,16 @@ void mx_specify_type_file(struct stat sb, t_lattrib **lattrib, int i);
 void mx_print_permissions_list(t_lattrib **lattrib, struct stat sb, int i);
 void mx_time_modif(struct stat sb, t_lattrib **lattrib, int i);
 void mx_check_and_connect_flags(t_flags *flags, t_sorted_odj *sort);
+char **mx_store_all_obj_array(t_flags *flags);
 
 // print output
 void mx_print_root_files(t_flags *flags);
 void mx_print_l_flag(t_lattrib **lattrib, t_flags *flags);
 void mx_print_li_flag(t_lattrib **lattrib, t_flags *flags);
 void mx_print_lh_flag(t_lattrib **lattrib, t_flags *flags);
+void mx_print_root_dirs_files(t_flags *flags);
+void mx_print_two_and_more_obj(t_flags *flags);
+void mx_print_one_obj(char *obj);
 
 void mx_flag_a(t_flags *flags);
 void mx_flag_a_l(t_flags *flags);
