@@ -79,6 +79,7 @@ int mx_max_len_of_size(t_lattrib **lattrib, t_flags *flags);
 void mx_size_align_right(t_lattrib **lattrib, t_flags *flags);
 
 // errors
+void mx_check_and_rewrite_obj(t_flags *flags);
 void mx_error_illegal_option(t_flags *flags);
 void mx_no_file_dir(char *fd);
 

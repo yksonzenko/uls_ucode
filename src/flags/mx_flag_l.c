@@ -33,7 +33,7 @@ static void one_obj(char *obj, t_flags *flags, t_lattrib **lattrib) {
     while ((dir = readdir(d)) != NULL)
         if (dir->d_name[0] != '.') {
             lattrib[i]->name = mx_strdup(dir->d_name);
-            stat(lattrib[i]->name, &sb);
+            lstat(lattrib[i]->name, &sb);
             get_attributes(lattrib, sb, i, dir);
             get_acl_xattr(lattrib, i);
             i++;

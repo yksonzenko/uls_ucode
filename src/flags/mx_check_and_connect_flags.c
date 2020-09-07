@@ -22,6 +22,11 @@ void mx_check_and_connect_flags(t_flags *flags, t_sorted_odj *sort) {
             flags->switch_flags[2] == 0 && flags->switch_flags[3] == 1 &&
             flags->switch_flags[4] == 0)
             mx_print_root_files(flags);
+// flags -l -i -h
+        // if (flags->switch_flags[0] == 0 && flags->switch_flags[1] == 1 &&
+        //     flags->switch_flags[2] == 1 && flags->switch_flags[3] == 1 &&
+        //     flags->switch_flags[4] == 0)
+        //     mx_print_flag_lih(flags, sort);
 // flags -p
         if (flags->switch_flags[0] == 0 && flags->switch_flags[1] == 0 &&
             flags->switch_flags[2] == 0 && flags->switch_flags[3] == 0 &&

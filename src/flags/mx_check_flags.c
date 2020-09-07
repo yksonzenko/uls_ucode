@@ -26,6 +26,7 @@ void mx_check_flags(t_flags *flags, t_sorted_odj *sort) {
         if (flags->argv[k][0] != '-' || (flags->argv[k][0] == '-' &&
             !flags->argv[k][1])) {
             store_all_obj_array(flags, k);
+            // mx_check_and_rewrite_obj(flags);
             // printf("OBJ_COUNT: %d\n", flags->count_obj);
             // printf("ALL_OBJECTS: \n");
             // mx_print_strarr(flags->all_obj, "\t");
@@ -42,6 +43,7 @@ void mx_check_flags(t_flags *flags, t_sorted_odj *sort) {
             store_all_obj_array(flags, k);
             // printf("OBJ_COUNT: %d\n", flags->count_obj);
             // mx_print_strarr(flags->all_obj, " ");
+            mx_check_and_rewrite_obj(flags);
             break;
         }
     }
@@ -56,6 +58,10 @@ void mx_check_flags(t_flags *flags, t_sorted_odj *sort) {
         // printf("%d\t", flags->switch_flags[6]);
         // printf("%d\t\n\n", flags->switch_flags[7]);
 // -----------
+    // if (flags->all_obj) {
+    //     mx_strdel(&flags->all_obj[999]);
+    //     mx_del_strarr(&flags->all_obj);
+    // }
 }
 
 static void store_all_obj_array(t_flags *flags, int k) {

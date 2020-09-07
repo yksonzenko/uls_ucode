@@ -29,9 +29,9 @@ void mx_print_root_files(t_flags *flags) {
     else {
         mx_output_in_one_column(flags->all_obj, flags->count_obj);
     }
-    closedir(d);
     if (flags->all_obj) {
         mx_strdel(&flags->all_obj[999]);
         mx_del_strarr(&flags->all_obj);
     }
+    closedir(d);
 }
