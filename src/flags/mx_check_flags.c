@@ -21,6 +21,7 @@ void mx_check_flags(t_flags *flags, t_sorted_odj *sort) {
                         flags->count_flags += 1;
                     }
             }
+        /*TRY TO CHECK HERE IF JUST ./ULS AND DIRS/FILES*/
         }
 // move all obj after flags to new 2d array
         if (flags->argv[k][0] != '-' || (flags->argv[k][0] == '-' &&
