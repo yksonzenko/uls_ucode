@@ -7,6 +7,7 @@
 #include <sys/ioctl.h>
 #include <sys/xattr.h>
 #include <sys/acl.h>
+#include <grp.h>
 #include <dirent.h>
 #include <unistd.h>
 #include <pwd.h>
@@ -48,15 +49,16 @@ typedef struct s_flags {
 
 typedef struct s_lattrib {
     int id;
+    char *id_str;
     int bl;
     char ftype;
     char *rights;
     int links;
     char *user;
-    int group;
+    char *group;
     int size;
     char *time;
-    char *name;
+    char *name; //d_name
     char *size_str;
     char *size_with_type;
 }       t_lattrib;
@@ -77,6 +79,9 @@ void mx_clean_struct_result(t_result *result_of_work_i);
 void mx_struct_sort(t_lattrib **lattrib, t_flags *flags);
 int mx_max_len_of_size(t_lattrib **lattrib, t_flags *flags);
 void mx_size_align_right(t_lattrib **lattrib, t_flags *flags);
+void mx_index_align_right(t_lattrib **lattrib, t_flags *flags);
+void mx_array_reverse(char **arr, int len);
+void mx_alphabet_sort3(char **array, int len);
 
 // errors
 void mx_check_and_rewrite_obj(t_flags *flags);
@@ -85,6 +90,7 @@ void mx_no_file_dir(char *fd);
 
 // flags
 t_lattrib **mx_flag_l(t_flags *flags, t_sorted_odj *sort);
+void mx_flag_i(t_flags *flags);
 void mx_specify_type_file(struct stat sb, t_lattrib **lattrib, int i);
 void mx_print_permissions_list(t_lattrib **lattrib, struct stat sb, int i);
 void mx_time_modif(struct stat sb, t_lattrib **lattrib, int i);
@@ -96,6 +102,7 @@ void mx_print_root_files(t_flags *flags);
 void mx_print_l_flag(t_lattrib **lattrib, t_flags *flags);
 void mx_print_li_flag(t_lattrib **lattrib, t_flags *flags);
 void mx_print_lh_flag(t_lattrib **lattrib, t_flags *flags);
+void mx_print_lhi_flag(t_lattrib **lattrib, t_flags *flags);
 void mx_print_root_dirs_files(t_flags *flags);
 void mx_print_two_and_more_obj(t_flags *flags);
 void mx_print_one_obj(char *obj);

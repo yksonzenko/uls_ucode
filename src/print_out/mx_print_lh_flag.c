@@ -10,7 +10,7 @@ void mx_print_lh_flag(t_lattrib **lattrib, t_flags *flags) {
         mx_printchar(' ');
         mx_printstr(lattrib[j]->user);
         mx_printstr("  ");
-        mx_printint(lattrib[j]->group);
+        mx_printstr(lattrib[j]->group);
         mx_printstr("  ");
         mx_printstr(lattrib[j]->size_with_type);
         mx_printchar(' ');

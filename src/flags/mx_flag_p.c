@@ -1,13 +1,13 @@
 #include "uls.h"
 
-static void one_obj(char *obj);
-static int get_dir_len(char *obj);
+static void one_obj(char *obj, t_flags *flags);
+static int get_dir_len(char *obj, t_flags *flags);
 static void two_and_more_obj(t_flags *flags);
+static void add_to_array(char **array, char *obj, int i, struct dirent *directory);
 
 void mx_flag_p(t_flags *flags) {
-    flags->number_of_obj = flags->count_obj;
     if (flags->number_of_obj == 0) {
-        one_obj(".");
+        one_obj(".", flags);
     }
     else if (flags->number_of_obj == 1) {
         two_and_more_obj(flags);
@@ -17,41 +17,47 @@ void mx_flag_p(t_flags *flags) {
     }
 }
 
-static void one_obj(char *obj) {
+static void one_obj(char *obj, t_flags *flags) {
     int len_of_array;
     int i = 0;
     char **array = NULL;
-    char *full_path = NULL;
     DIR *d;
-    DIR *temp_d;
     struct dirent *directory;
     d = opendir(obj);
-
     if (d) {
-        len_of_array = get_dir_len(obj);
+        len_of_array = get_dir_len(obj, flags);
         array = (char **)malloc(sizeof(char *) * len_of_array);
         while ((directory = readdir(d)) != NULL) {
-            if (directory->d_name[0] != '.') {
-                full_path = mx_strnew(mx_strlen(obj) + 1 + mx_strlen(directory->d_name));
-                full_path = mx_strcpy(full_path, obj);
-                full_path = mx_strcat(full_path, "/");
-                full_path = mx_strcat(full_path, directory->d_name);
-                if ((temp_d = opendir(full_path))) {
-                    array[i] = malloc(mx_strlen(directory->d_name) + 1);
-                    array[i] = mx_strcpy(array[i], directory->d_name);
-                    array[i] = mx_strcat(array[i], "/");
-                    closedir(temp_d);
-                } else {
-                    array[i] = malloc(mx_strlen(directory->d_name));
-                    array[i] = mx_strcpy(array[i], directory->d_name);
+            if (flags->switch_flags[0] == 1 || flags->switch_flags[6] == 1) {
+                if (flags->switch_flags[0] == 1) { // '-a' case
+                    add_to_array(array, obj, i, directory);
+                    i++;
                 }
-                i++;
-                mx_strdel(&full_path);
+                else if (flags->switch_flags[6] == 1 && (mx_strcmp(".", directory->d_name) != 0 && mx_strcmp("..", directory->d_name) != 0)) { // case '-A'
+                    add_to_array(array, obj, i, directory);
+                    i++;
+                }
+            }
+            else {
+                if (directory->d_name[0] != '.') { // case without '-a' and '-A'
+                    add_to_array(array, obj, i, directory);
+                    i++;
+                }
             }
         }
         closedir(d);
-        mx_alphabet_sort(array, len_of_array);
-        mx_output_by_size_of_wind(array, len_of_array);
+        // --sort and reverse--
+        mx_alphabet_sort3(array, len_of_array);
+
+        if (flags->switch_flags[7] == 1)
+            mx_array_reverse(array, len_of_array);
+        // --
+        // --output
+        if (flags->switch_flags[5] != 1)
+            mx_output_by_size_of_wind(array, len_of_array);
+        else
+            mx_output_in_one_column(array, len_of_array);
+        // --
         mx_strdel(&array[len_of_array - 1]);
         mx_del_strarr(&array);
     }
@@ -63,37 +69,74 @@ static void two_and_more_obj(t_flags *flags) {
     mx_file_dir_sort(sort, flags);
     if (sort->len_of_files_array != 0) {
         mx_alphabet_sort(sort->files, sort->len_of_files_array);
+        if (flags->switch_flags[7] == 1)
+            mx_array_reverse(sort->files, sort->len_of_files_array);
     }
     if (sort->len_of_dirs_array != 0) {
         mx_alphabet_sort(sort->dirs, sort->len_of_dirs_array);
+        if (flags->switch_flags[7] == 1)
+            mx_array_reverse(sort->dirs, sort->len_of_dirs_array);
     }
     if (sort->len_of_files_array != 0) {
-        mx_output_by_size_of_wind(sort->files, sort->len_of_files_array);
+        if (flags->switch_flags[5] != 1)
+            mx_output_by_size_of_wind(sort->files, sort->len_of_files_array);
+        else
+            mx_output_in_one_column(sort->files, sort->len_of_files_array);
     }
     for (int j = 0; j < sort->len_of_dirs_array; ++j) {
-        if (j != 0 || sort->len_of_files_array != 0)
-            mx_printchar('\n');
-        mx_printstr(sort->dirs[j]);
-        mx_printstr(":\n");
-        one_obj(sort->dirs[j]);
+        if (flags->number_of_obj != 1) {
+            if (j != 0 || sort->len_of_files_array != 0)
+                mx_printchar('\n');
+            mx_printstr(sort->dirs[j]);
+            mx_printstr(":\n");
+        }
+        one_obj(sort->dirs[j], flags);
     }
     mx_del_strarr(&sort->files);
     mx_del_strarr(&sort->dirs);
     free(sort);
 }
 
-static int get_dir_len(char *obj) {
+static int get_dir_len(char *obj, t_flags *flags) {
     DIR *d;
     int len_of_array = 0;
     struct dirent *directory;
     d = opendir(obj);
     if (d) {
         while ((directory = readdir(d)) != NULL) {
-            if (directory->d_name[0] != '.') {
-                len_of_array++;
+            if (flags->switch_flags[0] == 1 || flags->switch_flags[6] == 1){
+                if (flags->switch_flags[0] == 1) { // 'a' case
+                    len_of_array++;
+                }
+                else if (flags->switch_flags[6] == 1 && (mx_strcmp(".", directory->d_name) != 0 && mx_strcmp("..", directory->d_name) != 0)) {
+                    len_of_array++;
+                }
+            }
+            else {
+                if (directory->d_name[0] != '.') {
+                    len_of_array++;
+                }
             }
         }
         closedir(d);
     }
     return len_of_array;
+}
+
+static void add_to_array(char **array, char *obj, int i, struct dirent *directory) {
+    DIR *temp_d;
+    char *full_path = mx_strnew(mx_strlen(obj) + 1 + mx_strlen(directory->d_name));
+    full_path = mx_strcpy(full_path, obj);
+    full_path = mx_strcat(full_path, "/");
+    full_path = mx_strcat(full_path, directory->d_name);
+    if ((temp_d = opendir(full_path))) {
+        array[i] = malloc(mx_strlen(directory->d_name) + 1);
+        array[i] = mx_strcpy(array[i], directory->d_name);
+        array[i] = mx_strcat(array[i], "/");
+        closedir(temp_d);
+    } else {
+        array[i] = malloc(mx_strlen(directory->d_name));
+        array[i] = mx_strcpy(array[i], directory->d_name);
+    }
+    mx_strdel(&full_path);
 }

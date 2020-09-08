@@ -2,7 +2,7 @@
 
 int main(int argc, char **argv) {
     t_flags *flags = (t_flags*)malloc(sizeof(t_flags));
-    t_sorted_odj *sort = NULL;
+    t_sorted_odj *sort = (t_sorted_odj *)malloc(sizeof(t_sorted_odj));
     t_lattrib **lattrib = NULL;
     flags->argc = argc;
     flags->argv = argv;
@@ -16,31 +16,32 @@ int main(int argc, char **argv) {
                 flags->num_dir_file++;
     closedir(d);
 
-// // if just ./uls
-//     if (flags->argc == 1)
-//         mx_print_root_files(flags);
-//     if (flags->argc > 1 && flags->argv[1][0] != '-') {
+//     if (flags->argc > 1 && flags->argv[1][0] != '-')
 //         mx_print_root_dirs_files(flags);
-//     }
-    if (flags->argc == 1)
+// if just ./uls
+    if (flags->argc == 1 || ((mx_strcmp(flags->argv[1], "-h") == 0) &&
+        !flags->argv[2]) || ((mx_strcmp(flags->argv[1], "--") == 0) && !flags->argv[2]))
         mx_print_root_files(flags);
+
 // check illegal flags
     mx_error_illegal_option(flags);
+
 // if ./uls + flags(-i -l -la ...)
     mx_check_flags(flags, sort);
-    // if just ./uls
-
-    if (flags->argc > 1 && flags->argv[1][0] != '-') {
-        mx_print_root_dirs_files(flags);
-        // if (flags->all_obj) {
-        //     mx_strdel(&flags->all_obj[999]);
-        //     mx_del_strarr(&flags->all_obj);
-        // }
-    }
+    mx_check_and_rewrite_obj(flags);
     mx_check_and_connect_flags(flags, sort);
+
+    // if (flags->argc > 1 && flags->argv[1][0] != '-') {
+    //     mx_print_root_dirs_files(flags);
+    //     // if (flags->all_obj) {
+    //     //     mx_strdel(&flags->all_obj[999]);
+    //     //     mx_del_strarr(&flags->all_obj);
+    //     // }
+    // }
+    // mx_check_and_connect_flags(flags, sort);
     // if (flags->all_obj) {
     //     mx_strdel(&flags->all_obj[999]);
     //     mx_del_strarr(&flags->all_obj);
     // }
-    system("leaks -q uls");
+    // system("leaks -q uls");
 }

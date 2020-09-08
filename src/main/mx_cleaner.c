@@ -19,6 +19,10 @@ void mx_cleaner(t_flags *flags, t_lattrib **lattrib) {
                 mx_strdel(&lattrib[i]->size_str);
             if (lattrib[i]->size_with_type)
                 mx_strdel(&lattrib[i]->size_with_type);
+            if (lattrib[i]->group)
+                mx_strdel(&lattrib[i]->group);
+            if (lattrib[i]->id_str)
+                mx_strdel(&lattrib[i]->id_str);
             if (lattrib[i])
                 free(lattrib[i]);
         }

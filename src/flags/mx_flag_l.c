@@ -42,27 +42,40 @@ static void one_obj(char *obj, t_flags *flags, t_lattrib **lattrib) {
     mx_struct_sort(lattrib, flags);
 // ./uls -l print output
     total_blocks(flags, lattrib);
-    if (flags->switch_flags[0] == 0 && flags->switch_flags[1] == 1 &&
-        flags->switch_flags[2] == 1 && flags->switch_flags[3] == 0 &&
-        flags->switch_flags[4] == 0)
-        mx_print_li_flag(lattrib, flags);
-    if (flags->switch_flags[0] == 0 && flags->switch_flags[1] == 1 &&
-        flags->switch_flags[2] == 0 && flags->switch_flags[3] == 0 &&
-        flags->switch_flags[4] == 0)
+    if (flags->switch_flags[1] == 1 && flags->switch_flags[2] == 0 &&
+            flags->switch_flags[3] == 0)
         mx_print_l_flag(lattrib, flags);
+    else if (flags->switch_flags[2] == 1 && flags->switch_flags[1] == 1 &&
+            flags->switch_flags[3] == 0)
+        mx_print_li_flag(lattrib, flags);
+    if (flags->switch_flags[2] == 0 && flags->switch_flags[1] == 1 &&
+            flags->switch_flags[3] == 1) {
+        mx_flag_h(lattrib, flags);
+        mx_print_lh_flag(lattrib, flags);
+    }
+    if (flags->switch_flags[2] == 1 && flags->switch_flags[1] == 1 &&
+            flags->switch_flags[3] == 1) {
+        mx_flag_h(lattrib, flags);
+        mx_print_lhi_flag(lattrib, flags);
+    }
 }
 
 static void get_attributes(t_lattrib **lattrib, struct stat sb, int i,
                             struct dirent *dir) {
     struct passwd *passwd; // get username
-
+    struct group *groupid; // get group id name
     mx_specify_type_file(sb, lattrib, i);
     mx_print_permissions_list(lattrib, sb, i);
     lattrib[i]->id = sb.st_ino;
     lattrib[i]->links = sb.st_nlink;
     passwd = getpwuid(sb.st_uid);
     lattrib[i]->user = mx_strdup(passwd->pw_name);
-    lattrib[i]->group = sb.st_gid;
+    groupid = getgrgid(sb.st_gid);
+    if (groupid == NULL)
+        lattrib[i]->group = mx_itoa(sb.st_gid);
+    else
+        lattrib[i]->group = mx_strdup(groupid->gr_name);
+
     lattrib[i]->size = sb.st_size;
     mx_time_modif(sb, lattrib, i);
     lattrib[i]->bl = sb.st_blocks;
@@ -80,8 +93,8 @@ static void get_acl_xattr(t_lattrib **lattrib, int i) {
         acl = NULL;
     }
     xattr = listxattr(lattrib[i]->name, NULL, 0, XATTR_NOFOLLOW);
-    if (xattr < 0)
-        xattr = 0;
+    // if (xattr < 0)
+    //     xattr = 0;
     if (xattr > 0)
         acl_xattr = '@';
     else if (acl != NULL)

@@ -1,6 +1,6 @@
 #include "uls.h"
 
-static void store_all_obj_array(t_flags *flags, int k);
+char **store_all_obj_array(t_flags *flags, int k);
 
 // searching for flags
 void mx_check_flags(t_flags *flags, t_sorted_odj *sort) {
@@ -25,7 +25,7 @@ void mx_check_flags(t_flags *flags, t_sorted_odj *sort) {
 // move all obj after flags to new 2d array
         if (flags->argv[k][0] != '-' || (flags->argv[k][0] == '-' &&
             !flags->argv[k][1])) {
-            store_all_obj_array(flags, k);
+            flags->all_obj = store_all_obj_array(flags, k);
             // mx_check_and_rewrite_obj(flags);
             // printf("OBJ_COUNT: %d\n", flags->count_obj);
             // printf("ALL_OBJECTS: \n");
@@ -37,14 +37,11 @@ void mx_check_flags(t_flags *flags, t_sorted_odj *sort) {
         if (flags->argv[k][0] == '-' && flags->argv[k][1] == '-' &&
             !flags->argv[k][2]) {
             k += 1;
-            if (flags->argc == 2) {
-                mx_print_root_files(flags);
-            }
-            store_all_obj_array(flags, k);
-            // printf("OBJ_COUNT: %d\n", flags->count_obj);
-            // mx_print_strarr(flags->all_obj, " ");
+            flags->all_obj = store_all_obj_array(flags, k);
             mx_check_and_rewrite_obj(flags);
-            break;
+            mx_file_dir_sort(sort, flags);
+            // printf("OBJ_COUNT: %d\n", flags->count_obj);
+                // mx_print_strarr(flags->all_obj, " ");
         }
     }
 // -----------
@@ -64,9 +61,10 @@ void mx_check_flags(t_flags *flags, t_sorted_odj *sort) {
     // }
 }
 
-static void store_all_obj_array(t_flags *flags, int k) {
+char **store_all_obj_array(t_flags *flags, int k) {
     for (int i = 0; flags->argv[k]; i++, k++) {
         flags->all_obj[i] = mx_strdup(flags->argv[k]);
         flags->count_obj++;
     }
+    return flags->all_obj;
 }
