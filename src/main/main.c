@@ -15,14 +15,13 @@ int main(int argc, char **argv) {
             if (dir->d_name[0] != '.')
                 flags->num_dir_file++;
     closedir(d);
-
-//     if (flags->argc > 1 && flags->argv[1][0] != '-')
-//         mx_print_root_dirs_files(flags);
 // if just ./uls
     if (flags->argc == 1 || ((mx_strcmp(flags->argv[1], "-h") == 0) &&
-        !flags->argv[2]) || ((mx_strcmp(flags->argv[1], "--") == 0) && !flags->argv[2]))
+        !flags->argv[2]) || ((mx_strcmp(flags->argv[1], "--") == 0) &&
+        !flags->argv[2])) {
         mx_print_root_files(flags);
-
+        // exit(0);
+    }
 // check illegal flags
     mx_error_illegal_option(flags);
 
@@ -31,17 +30,7 @@ int main(int argc, char **argv) {
     mx_check_and_rewrite_obj(flags);
     mx_check_and_connect_flags(flags, sort);
 
-    // if (flags->argc > 1 && flags->argv[1][0] != '-') {
-    //     mx_print_root_dirs_files(flags);
-    //     // if (flags->all_obj) {
-    //     //     mx_strdel(&flags->all_obj[999]);
-    //     //     mx_del_strarr(&flags->all_obj);
-    //     // }
-    // }
-    // mx_check_and_connect_flags(flags, sort);
-    // if (flags->all_obj) {
-    //     mx_strdel(&flags->all_obj[999]);
-    //     mx_del_strarr(&flags->all_obj);
-    // }
-    // system("leaks -q uls");
+    if (flags->argc > 1 && flags->count_flags == 0)
+        mx_print_two_and_more_obj(flags);
+    system("leaks -q uls");
 }

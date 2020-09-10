@@ -10,6 +10,10 @@ void mx_output_by_size_of_wind(char **array, int len_of_array) {
     //window.ws_col = 90;
     int max_len = mx_the_biggest_name(array, len_of_array);
     max_len = change_max_len(max_len);
+    if (len_of_array == 0) {
+        return;
+    }
+
     if (max_len % 8 != 0) {
         while (max_len % 8 != 0) {
             max_len++;

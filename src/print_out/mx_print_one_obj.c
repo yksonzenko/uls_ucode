@@ -25,10 +25,13 @@ void mx_print_one_obj(char *obj) {
         closedir(d);
         mx_alphabet_sort(array, len_of_array);
         mx_output_by_size_of_wind(array, len_of_array);
-        if (array[len_of_array - 1])
-            mx_strdel(&array[len_of_array - 1]);
-        if (array)
-            mx_del_strarr(&array);
+        if (len_of_array != 0) {
+            if (array[len_of_array - 1])
+                mx_strdel(&array[len_of_array - 1]);
+            if (array)
+                mx_del_strarr(&array);
+        } else
+            free(array);
     }
     else {
         mx_printstr(obj);

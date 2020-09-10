@@ -58,8 +58,13 @@ static void one_obj(char *obj, t_flags *flags) {
         else
             mx_output_in_one_column(array, len_of_array);
         // --
-        mx_strdel(&array[len_of_array - 1]);
-        mx_del_strarr(&array);
+        if (len_of_array != 0) {
+            if (array[len_of_array - 1])
+                mx_strdel(&array[len_of_array - 1]);
+            if (array)
+                mx_del_strarr(&array);
+        } else
+            free(array);
     }
 }
 
@@ -92,8 +97,10 @@ static void two_and_more_obj(t_flags *flags) {
         }
         one_obj(sort->dirs[j], flags);
     }
-    mx_del_strarr(&sort->files);
-    mx_del_strarr(&sort->dirs);
+    if (sort->files)
+        mx_del_strarr(&sort->files);
+    if (sort->dirs)
+        mx_del_strarr(&sort->dirs);
     free(sort);
 }
 

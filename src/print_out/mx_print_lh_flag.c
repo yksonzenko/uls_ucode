@@ -2,11 +2,12 @@
 
 void mx_print_lh_flag(t_lattrib **lattrib, t_flags *flags) {
     mx_size_align_right(lattrib, flags);
+    mx_links_align_right(lattrib, flags);
     for (int j = 0; j < flags->count_obj; j++) {
         mx_printchar(lattrib[j]->ftype);
         mx_printstr(lattrib[j]->rights);
         mx_printchar(' ');
-        mx_printint(lattrib[j]->links);
+        mx_printstr(lattrib[j]->lk_str);
         mx_printchar(' ');
         mx_printstr(lattrib[j]->user);
         mx_printstr("  ");

@@ -3,10 +3,10 @@
 static void one_obj(char *obj, t_flags *flags, t_lattrib **lattrib);
 static void get_attributes(t_lattrib **lattrib, struct stat sb, int i,
                             struct dirent *dir);
-static void get_acl_xattr(t_lattrib **lattrib, int i);
-static void total_blocks(t_flags *flags, t_lattrib **lattrib);
+static void two_and_more_obj(t_flags *flags, t_lattrib **lattrib);
 
 t_lattrib **mx_flag_l(t_flags *flags, t_sorted_odj *sort) {
+    flags->num_dir_file = mx_get_dir_len(".", flags);
     t_lattrib **lattrib = (t_lattrib **)malloc(sizeof(t_lattrib *) *
                             flags->num_dir_file);
     for (int i = 0; i < flags->num_dir_file; i++) {
@@ -14,6 +14,9 @@ t_lattrib **mx_flag_l(t_flags *flags, t_sorted_odj *sort) {
     }
     if (flags->count_obj == 0) {
         one_obj(".", flags, lattrib);
+    }
+    else if (flags->count_obj >= 1) {
+        two_and_more_obj(flags, lattrib);
     }
     return lattrib;
 }
@@ -24,41 +27,40 @@ static void one_obj(char *obj, t_flags *flags, t_lattrib **lattrib) {
     struct dirent *dir;
     int i = 0;
 
-    d = opendir(obj);
-        while ((dir = readdir(d)) != NULL)
-            if (dir->d_name[0] != '.')
-                flags->count_obj++;
-    closedir(d);
+    flags->count_obj = flags->num_dir_file;
     d = opendir(obj);
     while ((dir = readdir(d)) != NULL)
-        if (dir->d_name[0] != '.') {
-            lattrib[i]->name = mx_strdup(dir->d_name);
-            lstat(lattrib[i]->name, &sb);
-            get_attributes(lattrib, sb, i, dir);
-            get_acl_xattr(lattrib, i);
-            i++;
-        }
+            if (flags->switch_flags[0] == 1 || flags->switch_flags[6] == 1) {
+                if (flags->switch_flags[0] == 1) { // '-a' case
+                    lattrib[i]->name = mx_strdup(dir->d_name);
+                    lstat(lattrib[i]->name, &sb);
+                    get_attributes(lattrib, sb, i, dir);
+                    mx_get_acl_xattr(lattrib, i);
+                    i++;
+                }
+                else if (flags->switch_flags[6] == 1 && (mx_strcmp(".", dir->d_name) != 0 &&
+                        mx_strcmp("..", dir->d_name) != 0)) { // case '-A'
+                    lattrib[i]->name = mx_strdup(dir->d_name);
+                    lstat(lattrib[i]->name, &sb);
+                    get_attributes(lattrib, sb, i, dir);
+                    mx_get_acl_xattr(lattrib, i);
+                    i++;
+                }
+            }
+            else {
+                if (dir->d_name[0] != '.') { // case without '-a' and '-A'
+                    lattrib[i]->name = mx_strdup(dir->d_name);
+                    lstat(lattrib[i]->name, &sb);
+                    get_attributes(lattrib, sb, i, dir);
+                    mx_get_acl_xattr(lattrib, i);
+                    i++;
+                }
+            }
     closedir(d);
     mx_struct_sort(lattrib, flags);
-// ./uls -l print output
-    total_blocks(flags, lattrib);
-    if (flags->switch_flags[1] == 1 && flags->switch_flags[2] == 0 &&
-            flags->switch_flags[3] == 0)
-        mx_print_l_flag(lattrib, flags);
-    else if (flags->switch_flags[2] == 1 && flags->switch_flags[1] == 1 &&
-            flags->switch_flags[3] == 0)
-        mx_print_li_flag(lattrib, flags);
-    if (flags->switch_flags[2] == 0 && flags->switch_flags[1] == 1 &&
-            flags->switch_flags[3] == 1) {
-        mx_flag_h(lattrib, flags);
-        mx_print_lh_flag(lattrib, flags);
-    }
-    if (flags->switch_flags[2] == 1 && flags->switch_flags[1] == 1 &&
-            flags->switch_flags[3] == 1) {
-        mx_flag_h(lattrib, flags);
-        mx_print_lhi_flag(lattrib, flags);
-    }
+    mx_check_what_to_print(flags, lattrib);
 }
+
 
 static void get_attributes(t_lattrib **lattrib, struct stat sb, int i,
                             struct dirent *dir) {
@@ -81,35 +83,34 @@ static void get_attributes(t_lattrib **lattrib, struct stat sb, int i,
     lattrib[i]->bl = sb.st_blocks;
 }
 
-static void get_acl_xattr(t_lattrib **lattrib, int i) {
-    acl_t acl = NULL;
-    acl_entry_t dummy;
-    ssize_t xattr = 0;
-    char acl_xattr;
-
-    acl = acl_get_link_np(lattrib[i]->name, ACL_TYPE_EXTENDED);
-    if (acl && acl_get_entry(acl, ACL_FIRST_ENTRY, &dummy) == -1) {
-        acl_free(acl);
-        acl = NULL;
+static void two_and_more_obj(t_flags *flags, t_lattrib **lattrib) {
+    t_sorted_odj *sort = (t_sorted_odj *)malloc(sizeof(t_sorted_odj));
+    sort->len_of_dirs_array = sort->len_of_files_array = 0;
+    mx_file_dir_sort(sort, flags);
+    // if (sort->len_of_files_array > 0) {
+    // mx_print_strarr(sort->files, " ");
+        // for (int i = 0; i < sort->len_of_files_array; i++)
+    //         one_obj(sort->files[0], flags, lattrib);
+    // }
+    // mx_printint(sort->len_of_dirs_array);
+    if (sort->len_of_dirs_array > 0) {
+        one_obj(sort->dirs[0], flags, lattrib);
     }
-    xattr = listxattr(lattrib[i]->name, NULL, 0, XATTR_NOFOLLOW);
-    // if (xattr < 0)
-    //     xattr = 0;
-    if (xattr > 0)
-        acl_xattr = '@';
-    else if (acl != NULL)
-        acl_xattr = '+';
-    else
-        acl_xattr = ' ';
-    lattrib[i]->rights[9] = acl_xattr;
-}
-
-static void total_blocks(t_flags *flags, t_lattrib **lattrib) {
-    int bl_sum = 0;
-    for (int i = 0; i < flags->count_obj; i++) {
-        bl_sum += lattrib[i]->bl;
-    }
-    mx_printstr("total ");
-    mx_printint(bl_sum);
-    mx_printchar('\n');
+    // if (sort->len_of_files_array != 0) {
+    //     mx_output_by_size_of_wind(sort->files, sort->len_of_files_array);
+    // }
+    // for (int j = 0; j < sort->len_of_dirs_array; ++j) {
+    //     if (flags->number_of_obj != 1) {
+    //         if (j != 0 || sort->len_of_files_array != 0)
+    //             mx_printchar('\n');
+    //         mx_printstr(sort->dirs[j]);
+    //         mx_printstr(":\n");
+    //     }
+    //     one_obj(sort->dirs[j], flags, lattrib);
+    // }
+        if (sort->files)
+            mx_del_strarr(&sort->files);
+        if (sort->dirs)
+            mx_del_strarr(&sort->dirs);
+        free(sort);
 }

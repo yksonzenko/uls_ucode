@@ -49,22 +49,22 @@ static t_result *one_obj(char *obj, t_flags *flags) {
             }
         }
         closedir(d);
-        max_len_of_inode = mx_max_len_of_inode(obj);
+        max_len_of_inode = mx_max_len_of_inode(obj, flags);
         d = opendir(obj);
         array = (char **)malloc(sizeof(char *) * len_of_array);
         while ((directory = readdir(d)) != NULL) {
-            if (flags->switch_flags[0] == 1 || flags->switch_flags[6] == 1){
-                if (flags->switch_flags[0] == 1) { // 'a' case
+            if (flags->switch_flags[0] == 1 || flags->switch_flags[6] == 1) {
+                if (flags->switch_flags[0] == 1) { // '-a' case
                     add_to_array(max_len_of_inode, directory, array, i);
                     i++;
                 }
-                else if (flags->switch_flags[6] == 1 && (mx_strcmp(".", directory->d_name) != 0 && mx_strcmp("..", directory->d_name) != 0)) {
+                else if (flags->switch_flags[6] == 1 && (mx_strcmp(".", directory->d_name) != 0 && mx_strcmp("..", directory->d_name) != 0)) { // case '-A'
                     add_to_array(max_len_of_inode, directory, array, i);
                     i++;
                 }
             }
             else {
-                if (directory->d_name[0] != '.') {
+                if (directory->d_name[0] != '.') { // case without '-a' and '-A'
                     add_to_array(max_len_of_inode, directory, array, i);
                     i++;
                 }
@@ -79,8 +79,11 @@ static t_result *one_obj(char *obj, t_flags *flags) {
             struct_result->result[k] = mx_strdup(array[k]);
         }
         struct_result->length = len_of_array;
-        mx_strdel(&array[len_of_array - 1]);
-        mx_del_strarr(&array);
+        if (len_of_array != 0) {
+            mx_strdel(&array[len_of_array - 1]);
+            mx_del_strarr(&array);
+        } else
+            free(array);
     }
     return struct_result;
 }
@@ -154,8 +157,12 @@ static void two_and_more_obj(t_flags *flags) {
         else
             mx_output_in_one_column(struct_result->result, struct_result->length);
         // --
-        mx_strdel(&struct_result->result[struct_result->length - 1]);
-        mx_del_strarr(&struct_result->result);
+        if (struct_result->length != 0) {
+            mx_strdel(&struct_result->result[struct_result->length - 1]);
+            mx_del_strarr(&struct_result->result);
+        } else
+            free(struct_result->result);
+
         free(struct_result);
     }
     mx_del_strarr(&sort->files);
@@ -220,6 +227,3 @@ static void add_to_array(int max_len_of_inode, struct dirent *directory, char **
     array[i] = mx_strcat(array[i], directory->d_name);
     mx_strdel(&inode);
 }
-
-
-

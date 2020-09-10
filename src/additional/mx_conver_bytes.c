@@ -8,8 +8,14 @@ char *mx_convert_bytes(int size) {
     if (size < 0 || size > 2147483647) {
         return NULL;
     }
+    if (size == 0) {
+        result = mx_strnew(2);
+        result = mx_strcpy(result, "0B");
+        return result;
+    }
+
     else if (size > 0 && size <= 1024) {
-        result = convert(size, "B", 1);;
+        result = convert(size, "B", 1);
     }
     else if (size > 1024 && size <= 1048576) {
         if (size < 10240)

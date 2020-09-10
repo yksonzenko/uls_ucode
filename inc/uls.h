@@ -54,6 +54,7 @@ typedef struct s_lattrib {
     char ftype;
     char *rights;
     int links;
+    char *lk_str;
     char *user;
     char *group;
     int size;
@@ -80,8 +81,11 @@ void mx_struct_sort(t_lattrib **lattrib, t_flags *flags);
 int mx_max_len_of_size(t_lattrib **lattrib, t_flags *flags);
 void mx_size_align_right(t_lattrib **lattrib, t_flags *flags);
 void mx_index_align_right(t_lattrib **lattrib, t_flags *flags);
+void mx_links_align_right(t_lattrib **lattrib, t_flags *flags);
 void mx_array_reverse(char **arr, int len);
 void mx_alphabet_sort3(char **array, int len);
+int mx_max_len_of_inode(char *obj, t_flags *flags);
+int mx_get_dir_len(char *obj, t_flags *flags);
 
 // errors
 void mx_check_and_rewrite_obj(t_flags *flags);
@@ -96,6 +100,7 @@ void mx_print_permissions_list(t_lattrib **lattrib, struct stat sb, int i);
 void mx_time_modif(struct stat sb, t_lattrib **lattrib, int i);
 void mx_check_and_connect_flags(t_flags *flags, t_sorted_odj *sort);
 char **mx_store_all_obj_array(t_flags *flags);
+void mx_get_acl_xattr(t_lattrib **lattrib, int i);
 
 // print output
 void mx_print_root_files(t_flags *flags);
@@ -106,9 +111,7 @@ void mx_print_lhi_flag(t_lattrib **lattrib, t_flags *flags);
 void mx_print_root_dirs_files(t_flags *flags);
 void mx_print_two_and_more_obj(t_flags *flags);
 void mx_print_one_obj(char *obj);
-
-void mx_flag_a(t_flags *flags);
-void mx_flag_a_l(t_flags *flags);
+void mx_check_what_to_print(t_flags *flags, t_lattrib **lattrib);
 
 
 /*
@@ -124,7 +127,6 @@ void mx_alphabet_sort(char **array, int len);
 void mx_alphabet_sort2(char **array, int len);
 
 int mx_the_biggest_name(char **array, int len);
-int mx_max_len_of_inode(char *obj);
 void mx_file_dir_sort(t_sorted_odj *sort, t_flags *flags);
 void ftoa(float n, char *res, int afterpoint);
 char *mx_convert_bytes(int size);

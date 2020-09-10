@@ -12,7 +12,7 @@ void mx_check_flags(t_flags *flags, t_sorted_odj *sort) {
     for (int i = 0; i < 9; i++)
         flags->switch_flags[i] = 0;
     flags->all_flags = mx_strsplit(FLAGS, ' ');
-    for (int k = 1; k < flags->argc; k++) {
+    for (int k = 1; flags->argv[k] != NULL; k++) {
         if (flags->argv[k][0] == '-' && flags->argv[k][1]) {
             for (int h = 1; flags->argv[k][h]; h++) {
                 for (int j = 0; flags->all_flags[j]; j++)
@@ -21,7 +21,6 @@ void mx_check_flags(t_flags *flags, t_sorted_odj *sort) {
                         flags->count_flags += 1;
                     }
             }
-        /*TRY TO CHECK HERE IF JUST ./ULS AND DIRS/FILES*/
         }
 // move all obj after flags to new 2d array
         if (flags->argv[k][0] != '-' || (flags->argv[k][0] == '-' &&
@@ -39,10 +38,10 @@ void mx_check_flags(t_flags *flags, t_sorted_odj *sort) {
             !flags->argv[k][2]) {
             k += 1;
             flags->all_obj = store_all_obj_array(flags, k);
-            mx_check_and_rewrite_obj(flags);
             mx_file_dir_sort(sort, flags);
             // printf("OBJ_COUNT: %d\n", flags->count_obj);
                 // mx_print_strarr(flags->all_obj, " ");
+            break;
         }
     }
 // -----------
