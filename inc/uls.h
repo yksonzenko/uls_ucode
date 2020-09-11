@@ -79,9 +79,9 @@ void mx_clean_struct_result(t_result *result_of_work_i);
 //additional
 void mx_struct_sort(t_lattrib **lattrib, t_flags *flags);
 int mx_max_len_of_size(t_lattrib **lattrib, t_flags *flags);
-void mx_size_align_right(t_lattrib **lattrib, t_flags *flags);
-void mx_index_align_right(t_lattrib **lattrib, t_flags *flags);
-void mx_links_align_right(t_lattrib **lattrib, t_flags *flags);
+void mx_size_align_right(t_lattrib **lattrib, t_flags *flags, t_sorted_odj *sort);
+void mx_index_align_right(t_lattrib **lattrib, t_flags *flags, t_sorted_odj *sort);
+void mx_links_align_right(t_lattrib **lattrib, t_flags *flags, t_sorted_odj *sort);
 void mx_array_reverse(char **arr, int len);
 void mx_alphabet_sort3(char **array, int len);
 int mx_max_len_of_inode(char *obj, t_flags *flags);
@@ -93,7 +93,7 @@ void mx_error_illegal_option(t_flags *flags);
 void mx_no_file_dir(char *fd);
 
 // flags
-t_lattrib **mx_flag_l(t_flags *flags, t_sorted_odj *sort);
+void mx_flag_l(t_flags *flags, t_sorted_odj *sort);
 void mx_flag_i(t_flags *flags);
 void mx_specify_type_file(struct stat sb, t_lattrib **lattrib, int i);
 void mx_print_permissions_list(t_lattrib **lattrib, struct stat sb, int i);
@@ -104,14 +104,14 @@ void mx_get_acl_xattr(t_lattrib **lattrib, int i);
 
 // print output
 void mx_print_root_files(t_flags *flags);
-void mx_print_l_flag(t_lattrib **lattrib, t_flags *flags);
-void mx_print_li_flag(t_lattrib **lattrib, t_flags *flags);
-void mx_print_lh_flag(t_lattrib **lattrib, t_flags *flags);
-void mx_print_lhi_flag(t_lattrib **lattrib, t_flags *flags);
+void mx_print_l_flag(t_lattrib **lattrib, t_flags *flags, t_sorted_odj *sort);
+void mx_print_li_flag(t_lattrib **lattrib, t_flags *flags, t_sorted_odj *sort);
+void mx_print_lh_flag(t_lattrib **lattrib, t_flags *flags, t_sorted_odj *sort);
+void mx_print_lhi_flag(t_lattrib **lattrib, t_flags *flags, t_sorted_odj *sort);
 void mx_print_root_dirs_files(t_flags *flags);
 void mx_print_two_and_more_obj(t_flags *flags);
 void mx_print_one_obj(char *obj);
-void mx_check_what_to_print(t_flags *flags, t_lattrib **lattrib);
+void mx_check_what_to_print(t_flags *flags, t_lattrib **lattrib, t_sorted_odj *sort);
 
 
 /*

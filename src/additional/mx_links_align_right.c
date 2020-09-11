@@ -1,14 +1,14 @@
 #include "uls.h"
 
-static int max_len_of_links(t_lattrib **lattrib, t_flags *flags);
+static int max_len_of_links(t_lattrib **lattrib, t_flags *flags, t_sorted_odj *sort);
 
-void mx_links_align_right(t_lattrib **lattrib, t_flags *flags) {
+void mx_links_align_right(t_lattrib **lattrib, t_flags *flags, t_sorted_odj *sort) {
     int temp = 0;
     char *temp_str = NULL;
     int max_len_of_lk = 0;
 
-    max_len_of_lk = max_len_of_links(lattrib, flags);
-    for (int i = 0; i < flags->count_obj; i++) {
+    max_len_of_lk = max_len_of_links(lattrib, flags, sort);
+    for (int i = 0; i < sort->len_of_files_array; i++) {
         lattrib[i]->lk_str = mx_strnew(max_len_of_lk);
         temp = max_len_of_lk - mx_intlen(lattrib[i]->links);
         if (temp != 0) {
@@ -29,10 +29,10 @@ void mx_links_align_right(t_lattrib **lattrib, t_flags *flags) {
             mx_strdel(&temp_str);
     }
 }
-static int max_len_of_links(t_lattrib **lattrib, t_flags *flags) {
+static int max_len_of_links(t_lattrib **lattrib, t_flags *flags, t_sorted_odj *sort) {
     int res = 0;
 
-    for (int i = 0; i < flags->count_obj; i++) {
+    for (int i = 0; i < sort->len_of_files_array; i++) {
         if (mx_intlen(lattrib[i]->links) > res)
             res = mx_intlen(lattrib[i]->links);
     }

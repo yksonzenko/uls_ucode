@@ -1,12 +1,11 @@
 #include "uls.h"
 
-void mx_size_align_right(t_lattrib **lattrib, t_flags *flags) {
+void mx_size_align_right(t_lattrib **lattrib, t_flags *flags, t_sorted_odj *sort) {
     int temp = 0;
     char *temp_str = NULL;
     int max_len_of_size = 0;
-
     max_len_of_size = mx_max_len_of_size(lattrib, flags);
-    for (int i = 0; i < flags->count_obj; i++) {
+    for (int i = 0; i < sort->len_of_files_array; i++) {
         lattrib[i]->size_str = mx_strnew(max_len_of_size);
         temp = max_len_of_size - mx_intlen(lattrib[i]->size);
         if (temp != 0) {

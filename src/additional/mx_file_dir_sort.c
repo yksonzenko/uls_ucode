@@ -5,6 +5,9 @@ void mx_file_dir_sort(t_sorted_odj *sort, t_flags *flags) {
     int b = 0;
     int c = 0;
     int d = 0;
+    sort->len_of_dirs_array = 0;
+    sort->len_of_files_array = 0;
+
     DIR *dir;
     sort->files = (char **)malloc(sizeof(char *) * flags->count_obj + 1);
     sort->dirs = (char **)malloc(sizeof(char *) * flags->count_obj + 1);

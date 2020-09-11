@@ -1,9 +1,10 @@
 #include "uls.h"
 
-void mx_print_l_flag(t_lattrib **lattrib, t_flags *flags) {
-    mx_size_align_right(lattrib, flags);
-    mx_links_align_right(lattrib, flags);
-    for (int j = 0; j < flags->count_obj; j++) {
+void mx_print_l_flag(t_lattrib **lattrib, t_flags *flags, t_sorted_odj *sort) {
+    mx_size_align_right(lattrib, flags, sort);
+    mx_links_align_right(lattrib, flags, sort);
+
+    for (int j = 0; j < sort->len_of_files_array; j++) {
         mx_printchar(lattrib[j]->ftype);
         mx_printstr(lattrib[j]->rights);
         mx_printchar(' ');
@@ -20,5 +21,4 @@ void mx_print_l_flag(t_lattrib **lattrib, t_flags *flags) {
         mx_printstr(lattrib[j]->name);
         mx_printchar('\n');
     }
-    mx_cleaner(flags, lattrib); // delete struct
 }

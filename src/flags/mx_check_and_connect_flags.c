@@ -13,8 +13,9 @@ void mx_check_and_connect_flags(t_flags *flags, t_sorted_odj *sort) {
 // flag -l
         if (flags->switch_flags[1] == 1 && flags->switch_flags[4] == 0 &&
             flags->switch_flags[5] == 0 && flags->switch_flags[7] == 0 &&
-            flags->switch_flags[8] == 0)
-            lattrib = mx_flag_l(flags, sort);
+            flags->switch_flags[8] == 0) {
+            mx_flag_l(flags, sort);
+        }
 // flags -h
         if (flags->switch_flags[0] == 0 && flags->switch_flags[1] == 0 &&
             flags->switch_flags[2] == 0 && flags->switch_flags[3] == 1 &&

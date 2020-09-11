@@ -20,7 +20,7 @@ int main(int argc, char **argv) {
         !flags->argv[2]) || ((mx_strcmp(flags->argv[1], "--") == 0) &&
         !flags->argv[2])) {
         mx_print_root_files(flags);
-        // exit(0);
+        exit(0);
     }
 // check illegal flags
     mx_error_illegal_option(flags);

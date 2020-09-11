@@ -23,14 +23,14 @@ void mx_print_root_files(t_flags *flags) {
         }
     flags->all_obj[i] = NULL;
     mx_bubble_sort(flags->all_obj, flags->count_obj);
-    if (flags->switch_flags[5] != 1) {
+    if (isatty(1)) {
         mx_output_by_size_of_wind(flags->all_obj, flags->count_obj);
     }
     else {
         mx_output_in_one_column(flags->all_obj, flags->count_obj);
     }
     if (flags->all_obj) {
-        mx_strdel(&flags->all_obj[999]);
+        mx_strdel(&flags->all_obj[flags->count_obj]);
         mx_del_strarr(&flags->all_obj);
     }
     closedir(d);

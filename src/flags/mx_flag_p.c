@@ -6,13 +6,13 @@ static void two_and_more_obj(t_flags *flags);
 static void add_to_array(char **array, char *obj, int i, struct dirent *directory);
 
 void mx_flag_p(t_flags *flags) {
-    if (flags->number_of_obj == 0) {
+    if (flags->count_obj == 0) {
         one_obj(".", flags);
     }
-    else if (flags->number_of_obj == 1) {
+    else if (flags->count_obj == 1) {
         two_and_more_obj(flags);
     }
-    else if (flags->number_of_obj > 1) {
+    else if (flags->count_obj > 1) {
         two_and_more_obj(flags);
     }
 }
@@ -89,7 +89,7 @@ static void two_and_more_obj(t_flags *flags) {
             mx_output_in_one_column(sort->files, sort->len_of_files_array);
     }
     for (int j = 0; j < sort->len_of_dirs_array; ++j) {
-        if (flags->number_of_obj != 1) {
+        if (flags->count_obj != 1) {
             if (j != 0 || sort->len_of_files_array != 0)
                 mx_printchar('\n');
             mx_printstr(sort->dirs[j]);

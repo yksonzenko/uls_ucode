@@ -14,7 +14,7 @@ void mx_print_two_and_more_obj(t_flags *flags) {
         mx_output_by_size_of_wind(sort->files, sort->len_of_files_array);
     }
     for (int j = 0; j < sort->len_of_dirs_array; ++j) {
-        if (flags->number_of_obj != 1) {
+        if (flags->count_obj != 1) {
             if (j != 0 || sort->len_of_files_array != 0)
                 mx_printchar('\n');
             mx_printstr(sort->dirs[j]);
@@ -22,9 +22,11 @@ void mx_print_two_and_more_obj(t_flags *flags) {
         }
         mx_print_one_obj(sort->dirs[j]);
     }
+    if (sort) {
         if (sort->files)
             mx_del_strarr(&sort->files);
         if (sort->dirs)
             mx_del_strarr(&sort->dirs);
         free(sort);
+    }
 }
