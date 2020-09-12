@@ -11,25 +11,12 @@ void mx_check_and_connect_flags(t_flags *flags, t_sorted_odj *sort) {
         flags->switch_flags[8] == 0)
         mx_flag_i(flags);
 // flag -l
-        if (flags->switch_flags[1] == 1 && flags->switch_flags[4] == 0 &&
-            flags->switch_flags[5] == 0 && flags->switch_flags[7] == 0 &&
-            flags->switch_flags[8] == 0) {
-            mx_flag_l(flags, sort);
-        }
-// flags -h
-        if (flags->switch_flags[0] == 0 && flags->switch_flags[1] == 0 &&
-            flags->switch_flags[2] == 0 && flags->switch_flags[3] == 1 &&
-            flags->switch_flags[4] == 0) {
-            // mx_file_dir_sort(sort, flags);
-            // mx_output_by_size_of_wind(flags->all_obj, flags->count_obj);
-        }
-// flags -l -i -h
-        // if (flags->switch_flags[0] == 0 && flags->switch_flags[1] == 1 &&
-        //     flags->switch_flags[2] == 1 && flags->switch_flags[3] == 1 &&
-        //     flags->switch_flags[4] == 0)
-        //     mx_print_flag_lih(flags, sort);
+    if (flags->switch_flags[1] == 1 && flags->switch_flags[4] == 0 &&
+        flags->switch_flags[5] == 0 && flags->switch_flags[7] == 0 &&
+        flags->switch_flags[8] == 0)
+        mx_flag_l(flags, sort);
 // flags -p
-        if (flags->switch_flags[1] == 0 && flags->switch_flags[2] == 0 &&
-            flags->switch_flags[3] == 0 && flags->switch_flags[4] == 1 && flags->switch_flags[8] == 0)
-            mx_flag_p(flags);
+    if (flags->switch_flags[1] == 0 && flags->switch_flags[2] == 0 &&
+        flags->switch_flags[3] == 0 && flags->switch_flags[4] == 1 && flags->switch_flags[8] == 0)
+        mx_flag_p(flags);
 }

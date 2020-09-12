@@ -118,7 +118,7 @@ void mx_check_what_to_print(t_flags *flags, t_lattrib **lattrib, t_sorted_odj *s
  * imarchenko function
  */
 void mx_flag_p(t_flags *flags);
-void mx_flag_h(t_lattrib **lattrib, t_flags *flags);
+void mx_flag_h(t_lattrib **lattrib, t_flags *flags, t_sorted_odj *sort);
 
 void mx_output_in_one_column(char **array, int len_of_array);
 void mx_output_by_size_of_wind(char **array, int len_of_array);

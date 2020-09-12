@@ -20,7 +20,7 @@ void mx_print_lh_flag(t_lattrib **lattrib, t_flags *flags, t_sorted_odj *sort) {
         mx_printstr(lattrib[j]->name);
         mx_printchar('\n');
     }
-    // for (int i = 0; i < flags->count_obj; i++)
-    //     if (lattrib[i]->size_with_type)
-    //         mx_strdel(&lattrib[i]->size_with_type);
+    for (int i = 0; i < sort->len_of_files_array; i++)
+        if (lattrib[i]->size_with_type)
+            mx_strdel(&lattrib[i]->size_with_type);
 }

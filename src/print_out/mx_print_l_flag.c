@@ -21,13 +21,4 @@ void mx_print_l_flag(t_lattrib **lattrib, t_flags *flags, t_sorted_odj *sort) {
         mx_printstr(lattrib[j]->name);
         mx_printchar('\n');
     }
-    for (int i = 0; i < sort->len_of_files_array; i++) {
-        free(lattrib[i]->rights);
-        free(lattrib[i]->lk_str);
-        free(lattrib[i]->user);
-        free(lattrib[i]->group);
-        free(lattrib[i]->size_str);
-        free(lattrib[i]->time);
-        free(lattrib[i]->name);
-    }
 }

@@ -4,6 +4,7 @@ static void get_attributes(t_lattrib **lattrib, struct stat sb, int i);
 static void check_and_print_files(t_lattrib **lattrib, t_flags *flags, t_sorted_odj *sort, int num_of_current_dir);
 static void check_and_open_dirs(t_lattrib **lattrib, t_flags *flags, t_sorted_odj *sort);
 static void total_blocks(t_flags *flags, t_lattrib **lattrib, t_sorted_odj *sort);
+static void print_dir_name(t_flags *flags, t_sorted_odj *sort, t_lattrib **lattrib, int num_of_current_dir);
 static int get_dir_len(char *obj, t_flags *flags);
 
 void mx_flag_l(t_flags *flags, t_sorted_odj *sort) {
@@ -35,6 +36,7 @@ static void check_and_open_dirs(t_lattrib **lattrib, t_flags *flags, t_sorted_od
             mx_alphabet_sort(sort->files, sort->len_of_files_array);
             check_and_print_files(lattrib, flags, sort, j);
             closedir(d);
+            i = 0;
         }
     }
     else {
@@ -57,7 +59,7 @@ static void check_and_print_files(t_lattrib **lattrib, t_flags *flags, t_sorted_
     struct stat sb;
     char *temp_path_name = NULL;
 
-    if (sort->len_of_files_array != 0) {
+    if (sort->len_of_files_array > 0) {
         lattrib = (t_lattrib **)malloc(sizeof(t_lattrib *) * sort->len_of_files_array);
         for (int i = 0; i < sort->len_of_files_array; i++) {
             lattrib[i] = malloc(sizeof(t_lattrib));
@@ -75,15 +77,18 @@ static void check_and_print_files(t_lattrib **lattrib, t_flags *flags, t_sorted_
             lstat(temp_path_name, &sb);
             get_attributes(lattrib, sb, i);
             mx_get_acl_xattr(lattrib, i);
+            mx_strdel(&temp_path_name);
         }
-        mx_strdel(&temp_path_name);
-        if (sort->len_of_dirs_array != 0)
+        if (sort->len_of_dirs_array == 0)
             total_blocks(flags, lattrib, sort);
+        if (sort->len_of_dirs_array != 0 && num_of_current_dir != -1)
+            print_dir_name(flags, sort, lattrib, num_of_current_dir);
         mx_check_what_to_print(flags, lattrib, sort);
+        if (num_of_current_dir == -1)
+            mx_printchar('\n');
         mx_strdel(&sort->files[sort->len_of_files_array - 1]);
         mx_del_strarr(&sort->files);
     }
-
 }
 
 static void get_attributes(t_lattrib **lattrib, struct stat sb, int i) {
@@ -109,20 +114,24 @@ static void get_attributes(t_lattrib **lattrib, struct stat sb, int i) {
 static void total_blocks(t_flags *flags, t_lattrib **lattrib, t_sorted_odj *sort) {
     int bl_sum = 0;
 
-    for (int j = 0; j < sort->len_of_dirs_array; j++) {
-        if (flags->count_obj != 1) {
-            if (j != 0 || sort->len_of_files_array != 0)
-                mx_printchar('\n');
-            mx_printstr(sort->dirs[j]);
-            mx_printstr(":\n");
-        }
-    }
     for (int i = 0; i < sort->len_of_files_array; i++) {
         bl_sum += lattrib[i]->bl;
     }
     mx_printstr("total ");
     mx_printint(bl_sum);
     mx_printchar('\n');
+}
+
+static void print_dir_name(t_flags *flags, t_sorted_odj *sort, t_lattrib **lattrib, int num_of_current_dir) {
+    if (num_of_current_dir != -1) {
+        if (flags->count_obj != 1) {
+            if (num_of_current_dir != 0)
+                mx_printchar('\n');
+            mx_printstr(sort->dirs[num_of_current_dir]);
+            mx_printstr(":\n");
+        }
+        total_blocks(flags, lattrib, sort);
+    }
 }
 
 static int get_dir_len(char *obj, t_flags *flags) {
