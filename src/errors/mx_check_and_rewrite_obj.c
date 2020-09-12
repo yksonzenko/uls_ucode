@@ -26,6 +26,7 @@ void mx_check_and_rewrite_obj(t_flags *flags) {
         mx_del_strarr(&flags->all_obj);
     }
     flags->count_obj = new_len;
+    flags->number_of_obj =flags->count_obj;
     flags->all_obj = (char **)malloc(sizeof(char *) * flags->count_obj);
     for (int i = 0; i < flags->count_obj; i++)
         flags->all_obj[i] = mx_strdup(temp_array[i]);

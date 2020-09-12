@@ -26,11 +26,6 @@ void mx_check_flags(t_flags *flags, t_sorted_odj *sort) {
         if (flags->argv[k][0] != '-' || (flags->argv[k][0] == '-' &&
             !flags->argv[k][1])) {
             flags->all_obj = store_all_obj_array(flags, k);
-            // mx_check_and_rewrite_obj(flags);
-            // printf("OBJ_COUNT: %d\n", flags->count_obj);
-            // printf("ALL_OBJECTS: \n");
-            // mx_print_strarr(flags->all_obj, "\t");
-            // mx_printchar('\n');
             break;
         }
 // move all obj after '--' to new 2d array

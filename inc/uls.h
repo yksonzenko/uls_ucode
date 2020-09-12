@@ -78,7 +78,7 @@ void mx_clean_struct_result(t_result *result_of_work_i);
 
 //additional
 void mx_struct_sort(t_lattrib **lattrib, t_flags *flags);
-int mx_max_len_of_size(t_lattrib **lattrib, t_flags *flags);
+int mx_max_len_of_size(t_lattrib **lattrib, t_flags *flags, t_sorted_odj *sort);
 void mx_size_align_right(t_lattrib **lattrib, t_flags *flags, t_sorted_odj *sort);
 void mx_index_align_right(t_lattrib **lattrib, t_flags *flags, t_sorted_odj *sort);
 void mx_links_align_right(t_lattrib **lattrib, t_flags *flags, t_sorted_odj *sort);
