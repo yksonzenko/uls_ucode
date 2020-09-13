@@ -100,7 +100,7 @@ void mx_print_permissions_list(t_lattrib **lattrib, struct stat sb, int i);
 void mx_time_modif(struct stat sb, t_lattrib **lattrib, int i);
 void mx_check_and_connect_flags(t_flags *flags, t_sorted_odj *sort);
 char **mx_store_all_obj_array(t_flags *flags);
-void mx_get_acl_xattr(t_lattrib **lattrib, int i);
+void mx_get_acl_xattr(char *name, t_lattrib **lattrib, int i);
 
 // print output
 void mx_print_root_files(t_flags *flags);

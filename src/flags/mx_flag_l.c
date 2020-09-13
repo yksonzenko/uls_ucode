@@ -26,7 +26,7 @@ static void check_and_open_dirs(t_lattrib **lattrib, t_flags *flags, t_sorted_od
         for (int j = 0; j < sort->len_of_dirs_array; j++) {
             d = opendir(sort->dirs[j]);
             sort->len_of_files_array = get_dir_len(sort->dirs[j], flags); // get number of files inside of dir
-            if (sort->len_of_files_array == 0) {
+            if (sort->len_of_files_array == 0 && sort->len_of_dirs_array > 1) {
                 if (j != 0) {
                     mx_printchar('\n');
                 }
@@ -85,7 +85,7 @@ static void check_and_print_files(t_lattrib **lattrib, t_flags *flags, t_sorted_
             }
             lstat(temp_path_name, &sb);
             get_attributes(lattrib, sb, i);
-            mx_get_acl_xattr(lattrib, i);
+            mx_get_acl_xattr(temp_path_name, lattrib, i);
             mx_strdel(&temp_path_name);
         }
         if (sort->len_of_dirs_array == 0)
