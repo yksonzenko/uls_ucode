@@ -7,8 +7,8 @@ void mx_file_dir_sort(t_sorted_odj *sort, t_flags *flags) {
     int d = 0;
     sort->len_of_dirs_array = 0;
     sort->len_of_files_array = 0;
-
     DIR *dir;
+    
     sort->files = (char **)malloc(sizeof(char *) * flags->count_obj + 1);
     sort->dirs = (char **)malloc(sizeof(char *) * flags->count_obj + 1);
     for (int i = 0; i < flags->count_obj; i++) {
@@ -35,4 +35,8 @@ void mx_file_dir_sort(t_sorted_odj *sort, t_flags *flags) {
         sort->len_of_files_array++;
         d++;
     }
+    if (sort->len_of_files_array == 0) {
+       mx_del_strarr(&sort->files);
+    }
+
 }

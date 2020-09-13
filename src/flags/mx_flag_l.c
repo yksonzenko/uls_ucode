@@ -26,6 +26,15 @@ static void check_and_open_dirs(t_lattrib **lattrib, t_flags *flags, t_sorted_od
         for (int j = 0; j < sort->len_of_dirs_array; j++) {
             d = opendir(sort->dirs[j]);
             sort->len_of_files_array = get_dir_len(sort->dirs[j], flags); // get number of files inside of dir
+            if (sort->len_of_files_array == 0) {
+                if (j != 0) {
+                    mx_printchar('\n');
+                }
+                mx_printstr(sort->dirs[j]);
+                mx_printstr(":\n");
+                closedir(d);
+                continue;
+            }
             sort->files = (char **)malloc(sizeof(char *) * sort->len_of_files_array + 1);
             while((dir = readdir(d)) != NULL) {
                 if (dir->d_name[0] != '.') { // case without '-a' and '-A'

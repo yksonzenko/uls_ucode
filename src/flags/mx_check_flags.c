@@ -34,26 +34,9 @@ void mx_check_flags(t_flags *flags, t_sorted_odj *sort) {
             k += 1;
             flags->all_obj = store_all_obj_array(flags, k);
             mx_file_dir_sort(sort, flags);
-            // printf("OBJ_COUNT: %d\n", flags->count_obj);
-                // mx_print_strarr(flags->all_obj, " ");
             break;
         }
     }
-// -----------
-        // printf("\n--switch_flags--\n");
-        // printf("%d\t", flags->switch_flags[0]);
-        // printf("%d\t", flags->switch_flags[1]);
-        // printf("%d\t", flags->switch_flags[2]);
-        // printf("%d\t", flags->switch_flags[3]);
-        // printf("%d\t", flags->switch_flags[4]);
-        // printf("%d\t", flags->switch_flags[5]);
-        // printf("%d\t", flags->switch_flags[6]);
-        // printf("%d\t\n\n", flags->switch_flags[7]);
-// -----------
-    // if (flags->all_obj) {
-    //     mx_strdel(&flags->all_obj[999]);
-    //     mx_del_strarr(&flags->all_obj);
-    // }
 }
 
 char **store_all_obj_array(t_flags *flags, int k) {

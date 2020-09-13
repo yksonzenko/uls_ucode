@@ -17,8 +17,7 @@ void mx_print_one_obj(char *obj) {
         array = (char **)malloc(sizeof(char *) * len_of_array);
         while ((directory = readdir(d)) != NULL) {
             if (directory->d_name[0] != '.') {
-                array[i] = malloc(mx_strlen(directory->d_name));
-                array[i] = mx_strcpy(array[i], directory->d_name);
+                array[i] = mx_strdup(directory->d_name);
                 i++;
             }
         }

@@ -13,7 +13,7 @@
 #include <pwd.h>
 #include <time.h>
 
-#define INVALID_USAGE   "usage: uls [-alihp1Ar] [file ...]"
+#define INVALID_USAGE   "usage: uls [-alihpAr] [file ...]"
 #define ILLEGAL_OPT     "uls: illegal option -- "
 
 #define FLAGS   "a l i h p 1 A r s \0"
