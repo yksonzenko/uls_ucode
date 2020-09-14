@@ -13,7 +13,9 @@ int mx_max_len_of_inode(char *obj, t_flags *flags) {
                         res = mx_intlen(directory->d_ino);
                     }
                 }
-                else if (flags->switch_flags[6] == 1 && (mx_strcmp(".", directory->d_name) != 0 && mx_strcmp("..", directory->d_name) != 0)) { // case '-A'
+                else if (flags->switch_flags[6] == 1 &&
+                        (mx_strcmp(".", directory->d_name) != 0 &&
+                        mx_strcmp("..", directory->d_name) != 0)) { // case '-A'
                     if (mx_intlen(directory->d_ino) > res) {
                         res = mx_intlen(directory->d_ino);
                     }

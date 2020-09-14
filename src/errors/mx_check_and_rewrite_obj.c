@@ -2,6 +2,7 @@
 
 void mx_check_and_rewrite_obj(t_flags *flags) {
     int new_len = 0;
+    flags->error_checher = 0;
     DIR *d;
     int fd;
     char **temp_array = (char **)malloc(sizeof(char *) * flags->count_obj);
@@ -18,8 +19,10 @@ void mx_check_and_rewrite_obj(t_flags *flags) {
             new_len++;
             close(fd);
         }
-        else
+        else {
             mx_no_file_dir(flags->all_obj[j]);
+            flags->error_checher = 1;
+        }
     }
     if (flags->all_obj) {
         mx_strdel(&flags->all_obj[flags->count_obj]);

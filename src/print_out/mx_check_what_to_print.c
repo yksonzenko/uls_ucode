@@ -19,15 +19,5 @@ void mx_check_what_to_print(t_flags *flags, t_lattrib **lattrib, t_sorted_odj *s
         mx_print_lhi_flag(lattrib, flags, sort);
     }
 
-    for (int i = 0; i < sort->len_of_files_array; i++) {
-        free(lattrib[i]->rights);
-        free(lattrib[i]->lk_str);
-        free(lattrib[i]->user);
-        free(lattrib[i]->group);
-        free(lattrib[i]->size_str);
-        free(lattrib[i]->time);
-        free(lattrib[i]->name);
-        free(lattrib[i]);
-    }
-    free(lattrib);
+    mx_cleaner(sort, lattrib);
 }

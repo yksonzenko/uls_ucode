@@ -88,12 +88,12 @@ static void check_and_print_files(t_lattrib **lattrib, t_flags *flags, t_sorted_
             mx_get_acl_xattr(temp_path_name, lattrib, i);
             mx_strdel(&temp_path_name);
         }
-        if (sort->len_of_dirs_array == 0)
+        if (flags->count_obj == 0)
             total_blocks(flags, lattrib, sort);
         if (sort->len_of_dirs_array != 0 && num_of_current_dir != -1)
             print_dir_name(flags, sort, lattrib, num_of_current_dir);
         mx_check_what_to_print(flags, lattrib, sort);
-        if (num_of_current_dir == -1)
+        if (num_of_current_dir == -1 && sort->len_of_dirs_array > 0)
             mx_printchar('\n');
         mx_strdel(&sort->files[sort->len_of_files_array - 1]);
         mx_del_strarr(&sort->files);

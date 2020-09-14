@@ -45,6 +45,7 @@ typedef struct s_flags {
     int count_obj; // number of objects from argv
     int num_dir_file; // number of files and dirs from root
     int number_of_obj;
+    int error_checher;
 }       t_flags;
 
 typedef struct s_lattrib {
@@ -56,7 +57,9 @@ typedef struct s_lattrib {
     int links;
     char *lk_str;
     char *user;
+    char *user_str;
     char *group;
+    char *group_str;
     int size;
     char *time;
     char *name; //d_name
@@ -73,7 +76,7 @@ typedef struct s_result {
  * yksonzenko function
  */
 void mx_check_flags(t_flags *flags, t_sorted_odj *sort);
-void mx_cleaner(t_flags *flags, t_lattrib **lattrib);
+void mx_cleaner(t_sorted_odj *sort, t_lattrib **lattrib);
 void mx_clean_struct_result(t_result *result_of_work_i);
 
 //additional
@@ -82,6 +85,8 @@ int mx_max_len_of_size(t_lattrib **lattrib, t_flags *flags, t_sorted_odj *sort);
 void mx_size_align_right(t_lattrib **lattrib, t_flags *flags, t_sorted_odj *sort);
 void mx_index_align_right(t_lattrib **lattrib, t_flags *flags, t_sorted_odj *sort);
 void mx_links_align_right(t_lattrib **lattrib, t_flags *flags, t_sorted_odj *sort);
+void mx_username_align_left(t_lattrib **lattrib, t_flags *flags, t_sorted_odj *sort);
+void mx_group_align_left(t_lattrib **lattrib, t_flags *flags, t_sorted_odj *sort);
 void mx_array_reverse(char **arr, int len);
 void mx_alphabet_sort3(char **array, int len);
 int mx_max_len_of_inode(char *obj, t_flags *flags);
