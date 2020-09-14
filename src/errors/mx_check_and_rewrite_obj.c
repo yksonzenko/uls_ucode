@@ -5,6 +5,7 @@ void mx_check_and_rewrite_obj(t_flags *flags) {
     flags->error_checher = 0;
     DIR *d;
     int fd;
+    mx_alphabet_sort(flags->all_obj, flags->count_obj);
     char **temp_array = (char **)malloc(sizeof(char *) * flags->count_obj);
     for (int i = 0; i < flags->count_obj; i++)
         temp_array[i] = NULL;
@@ -30,6 +31,9 @@ void mx_check_and_rewrite_obj(t_flags *flags) {
     }
     flags->count_obj = new_len;
     flags->number_of_obj =flags->count_obj;
+    if (flags->count_obj == 0 && flags->error_checher == 1) {
+        exit(1);
+    }
     flags->all_obj = (char **)malloc(sizeof(char *) * flags->count_obj);
     for (int i = 0; i < flags->count_obj; i++)
         flags->all_obj[i] = mx_strdup(temp_array[i]);

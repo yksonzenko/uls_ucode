@@ -58,7 +58,9 @@ static t_result *one_obj(char *obj, t_flags *flags) {
                     add_to_array(max_len_of_inode, directory, array, i);
                     i++;
                 }
-                else if (flags->switch_flags[6] == 1 && (mx_strcmp(".", directory->d_name) != 0 && mx_strcmp("..", directory->d_name) != 0)) { // case '-A'
+                else if (flags->switch_flags[6] == 1 &&
+                        (mx_strcmp(".", directory->d_name) != 0 &&
+                        mx_strcmp("..", directory->d_name) != 0)) { // case '-A'
                     add_to_array(max_len_of_inode, directory, array, i);
                     i++;
                 }
