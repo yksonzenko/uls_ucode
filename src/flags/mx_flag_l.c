@@ -88,7 +88,7 @@ static void check_and_print_files(t_lattrib **lattrib, t_flags *flags, t_sorted_
             mx_get_acl_xattr(temp_path_name, lattrib, i);
             if (S_ISLNK(sb.st_mode)) { // get link to output name
                 int links = 0;
-                lattrib[i]->link_str = (char *)malloc(sizeof(char) * sb.st_size);
+                lattrib[i]->link_str = mx_strnew(sb.st_size);
                 links = readlink(temp_path_name, lattrib[i]->link_str, sb.st_size);
             }
             mx_strdel(&temp_path_name);
@@ -113,8 +113,6 @@ static void get_attributes(t_lattrib **lattrib, struct stat sb, int i) {
     lattrib[i]->id = sb.st_ino;
     lattrib[i]->links = sb.st_nlink;
     passwd = getpwuid(sb.st_uid);
-    // mx_printstr(passwd->pw_name);
-    // mx_printchar('\n');
     lattrib[i]->user = mx_strdup(passwd->pw_name);
     groupid = getgrgid(sb.st_gid);
     if (groupid == NULL)

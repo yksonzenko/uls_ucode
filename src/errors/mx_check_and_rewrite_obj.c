@@ -15,6 +15,11 @@ void mx_check_and_rewrite_obj(t_flags *flags) {
             new_len++;
             closedir(d);
         }
+        else if (errno == 13) {
+            temp_array[new_len] = mx_strdup(flags->all_obj[j]);
+            new_len++;
+            flags->error_checher = 1;
+        }
         else if ((fd = open(flags->all_obj[j], O_RDONLY)) > 0) {
             temp_array[new_len] = mx_strdup(flags->all_obj[j]);
             new_len++;

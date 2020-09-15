@@ -16,7 +16,12 @@ void mx_file_dir_sort(t_sorted_odj *sort, t_flags *flags) {
             sort->dirs[a] = mx_strdup(flags->all_obj[i]);
             a++;
             closedir(dir);
-        } else {
+        }
+        else if (errno == 13) {
+            sort->dirs[a] = mx_strdup(flags->all_obj[i]);
+            a++;
+        }
+        else {
             sort->files[b] = mx_strdup(flags->all_obj[i]);
             b++;
         }

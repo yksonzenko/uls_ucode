@@ -25,6 +25,7 @@ int main(int argc, char **argv) {
 
     if (flags->argc > 1 && flags->count_flags == 0)
         mx_print_two_and_more_obj(flags);
+    mx_printstr("\n\n");
     system("leaks -q uls");
     if (flags->error_checher == 1)
         exit(1);

@@ -12,6 +12,7 @@
 #include <unistd.h>
 #include <pwd.h>
 #include <time.h>
+#include <errno.h>
 
 #define INVALID_USAGE   "usage: uls [-alihpAr] [file ...]"
 #define ILLEGAL_OPT     "uls: illegal option -- "
@@ -71,6 +72,7 @@ typedef struct s_lattrib {
 typedef struct s_result {
     char **result;
     int length;
+    bool permission;
 }              t_result;
 
 /*
@@ -97,6 +99,7 @@ int mx_get_dir_len(char *obj, t_flags *flags);
 void mx_check_and_rewrite_obj(t_flags *flags);
 void mx_error_illegal_option(t_flags *flags);
 void mx_no_file_dir(char *fd);
+void mx_print_permission_error(char *fd);
 
 // flags
 void mx_flag_l(t_flags *flags, t_sorted_odj *sort);
