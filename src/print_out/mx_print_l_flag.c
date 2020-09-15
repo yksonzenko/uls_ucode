@@ -21,6 +21,12 @@ void mx_print_l_flag(t_lattrib **lattrib, t_flags *flags, t_sorted_odj *sort) {
         mx_printstr(lattrib[j]->time);
         mx_printchar(' ');
         mx_printstr(lattrib[j]->name);
+        if (lattrib[j]->ftype == 'l') {
+            mx_printstr(" -> ");
+            mx_printstr(lattrib[j]->link_str);
+            mx_strdel(&lattrib[j]->link_str);
+        }
         mx_printchar('\n');
     }
+
 }

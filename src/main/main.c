@@ -15,7 +15,6 @@ int main(int argc, char **argv) {
         !flags->argv[2]) || ((mx_strcmp(flags->argv[1], "--") == 0) &&
         !flags->argv[2])) {
         mx_print_root_files(flags);
-
     }
 // check illegal flags
     mx_error_illegal_option(flags);
@@ -26,6 +25,7 @@ int main(int argc, char **argv) {
 
     if (flags->argc > 1 && flags->count_flags == 0)
         mx_print_two_and_more_obj(flags);
+    system("leaks -q uls");
     if (flags->error_checher == 1)
         exit(1);
     else

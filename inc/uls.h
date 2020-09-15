@@ -55,6 +55,7 @@ typedef struct s_lattrib {
     char ftype;
     char *rights;
     int links;
+    char *link_str;
     char *lk_str;
     char *user;
     char *user_str;
