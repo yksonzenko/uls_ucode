@@ -15,7 +15,10 @@ void mx_print_two_and_more_obj(t_flags *flags) {
         mx_alphabet_sort(sort->dirs, sort->len_of_dirs_array);
     }
     if (sort->len_of_files_array != 0) {
-        mx_output_by_size_of_wind(sort->files, sort->len_of_files_array);
+        if (isatty(1))
+            mx_output_by_size_of_wind(sort->files, sort->len_of_files_array);
+        else
+            mx_output_in_one_column(sort->files, sort->len_of_files_array);
     }
     for (int j = 0; j < sort->len_of_dirs_array; ++j) {
         if (flags->count_obj != 1) {

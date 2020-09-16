@@ -28,5 +28,4 @@ void mx_print_l_flag(t_lattrib **lattrib, t_flags *flags, t_sorted_odj *sort) {
         }
         mx_printchar('\n');
     }
-
 }

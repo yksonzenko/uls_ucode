@@ -23,7 +23,10 @@ void mx_print_one_obj(char *obj) {
         }
         closedir(d);
         mx_alphabet_sort(array, len_of_array);
-        mx_output_by_size_of_wind(array, len_of_array);
+        if (isatty(1))
+            mx_output_by_size_of_wind(array, len_of_array);
+        else
+            mx_output_in_one_column(array, len_of_array);
         if (len_of_array != 0) {
             if (array[len_of_array - 1])
                 mx_strdel(&array[len_of_array - 1]);

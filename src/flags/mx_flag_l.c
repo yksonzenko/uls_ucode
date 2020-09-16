@@ -8,12 +8,11 @@ static void print_dir_name(t_flags *flags, t_sorted_odj *sort, t_lattrib **lattr
 static int get_dir_len(char *obj, t_flags *flags);
 
 void mx_flag_l(t_flags *flags, t_sorted_odj *sort) {
-    mx_alphabet_sort(flags->all_obj, flags->count_obj);
-    mx_file_dir_sort(sort, flags);
-    t_lattrib **lattrib = NULL;
-
-    check_and_print_files(lattrib, flags, sort, -1);
-    check_and_open_dirs(lattrib, flags, sort);
+        mx_alphabet_sort(flags->all_obj, flags->count_obj);
+        mx_file_dir_sort(sort, flags);
+        t_lattrib **lattrib = NULL;
+        check_and_print_files(lattrib, flags, sort, -1);
+        check_and_open_dirs(lattrib, flags, sort);
 }
 
 static void check_and_open_dirs(t_lattrib **lattrib, t_flags *flags, t_sorted_odj *sort) {
@@ -21,7 +20,6 @@ static void check_and_open_dirs(t_lattrib **lattrib, t_flags *flags, t_sorted_od
     struct dirent *dir;
     int i = 0;
     sort->len_of_files_array = 0;
-
     if (flags->count_obj != 0) {
         for (int j = 0; j < sort->len_of_dirs_array; j++) {
             d = opendir(sort->dirs[j]);

@@ -55,7 +55,7 @@ static void one_obj(char *obj, t_flags *flags) {
             mx_array_reverse(array, len_of_array);
         // --
         // --output
-        if (flags->switch_flags[5] != 1)
+        if (isatty(1))
             mx_output_by_size_of_wind(array, len_of_array);
         else
             mx_output_in_one_column(array, len_of_array);
@@ -85,7 +85,7 @@ static void two_and_more_obj(t_flags *flags) {
             mx_array_reverse(sort->dirs, sort->len_of_dirs_array);
     }
     if (sort->len_of_files_array != 0) {
-        if (flags->switch_flags[5] != 1)
+        if (isatty(1))
             mx_output_by_size_of_wind(sort->files, sort->len_of_files_array);
         else
             mx_output_in_one_column(sort->files, sort->len_of_files_array);
