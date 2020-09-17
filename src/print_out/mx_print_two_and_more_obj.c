@@ -4,7 +4,8 @@ void mx_print_two_and_more_obj(t_flags *flags) {
     t_sorted_odj *sort = (t_sorted_odj *)malloc(sizeof(t_sorted_odj));
     sort->len_of_dirs_array = sort->len_of_files_array = 0;
     mx_file_dir_sort(sort, flags);
-    if (flags->error_checher == 1 && sort->len_of_dirs_array == 1) {
+    if (flags->error_checher == 1 && sort->len_of_dirs_array == 1 &&
+        sort->len_of_files_array == 0) {
         mx_printstr(sort->dirs[0]);
         mx_printstr(":\n");
     }

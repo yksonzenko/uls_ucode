@@ -65,58 +65,6 @@ static void multiple_line_output(char **array, int len_of_array, int max_len, st
     }
 }
 
-// static void multiple_line_output(char **array, int len_of_array, int max_len, struct winsize window) {
-//     int number_of_col = 0;
-//     int number_objs_in_col = 0;
-//     int temp = 0;
-//     int k = 0;
-//     if (len_of_array % 2 == 0) {
-//         number_of_col = len_of_array / 2;
-//     } else {
-//         number_of_col = len_of_array / 2 + 1;
-//     }
-//     while (true) {
-//         if (number_of_col * max_len <= window.ws_col) {
-//             break;
-//         }
-//         else {
-//             if (number_of_col % 2 != 0) {
-//                 number_of_col = number_of_col / 2 + 1;
-//             }
-//             else {
-//                 number_of_col = number_of_col / 2;
-//             }
-//         }
-//     }
-//     if (len_of_array % number_of_col != 0) {
-//         number_objs_in_col = len_of_array / number_of_col + 1;
-//     }
-//     else {
-//         number_objs_in_col = len_of_array / number_of_col;
-//     }
-//     for (int i = 0; i < number_objs_in_col; i++) {
-//         temp = max_len - mx_strlen(array[i]);
-//         mx_printstr(array[i]);
-//         if (temp != 0) {
-//             for (int j = 0; j < temp; ++j) {
-//                 mx_printchar(' ');
-//             }
-//         }
-//          k = i;
-//         while (k + number_objs_in_col <= len_of_array - 1) {
-//             k += number_objs_in_col;
-//             temp = max_len - mx_strlen(array[k]);
-//             mx_printstr(array[k]);
-//             if (temp != 0) {
-//                 for (int j = 0; j < temp; ++j) {
-//                     mx_printchar(' ');
-//                 }
-//             }
-//         }
-//         mx_printchar('\n');
-//     }
-// }
-
 static int change_max_len(int max_len) {
     if ((max_len + 1) % 8 == 0) {
         max_len++;
