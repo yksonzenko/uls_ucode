@@ -4,6 +4,7 @@ static void one_obj(char *obj, t_flags *flags);
 static int get_dir_len(char *obj, t_flags *flags);
 static void two_and_more_obj(t_flags *flags);
 static void add_to_array(char **array, char *obj, int i, struct dirent *directory);
+static char *trim(char *string, char **current_file);
 
 void mx_flag_p(t_flags *flags) {
     if (flags->count_obj == 0) {
@@ -34,8 +35,8 @@ static void one_obj(char *obj, t_flags *flags) {
                     i++;
                 }
                 else if (flags->switch_flags[6] == 1 &&
-                        (mx_strcmp(".", directory->d_name) != 0 &&
-                        mx_strcmp("..", directory->d_name) != 0)) { // case '-A'
+                         (mx_strcmp(".", directory->d_name) != 0 &&
+                          mx_strcmp("..", directory->d_name) != 0)) { // case '-A'
                     add_to_array(array, obj, i, directory);
                     i++;
                 }
@@ -55,7 +56,7 @@ static void one_obj(char *obj, t_flags *flags) {
             mx_array_reverse(array, len_of_array);
         // --
         // --output
-        if (isatty(1))
+        if (flags->switch_flags[5] != 1)
             mx_output_by_size_of_wind(array, len_of_array);
         else
             mx_output_in_one_column(array, len_of_array);
@@ -67,6 +68,13 @@ static void one_obj(char *obj, t_flags *flags) {
                 mx_del_strarr(&array);
         } else
             free(array);
+    }
+    else { // permission error
+        char *current_file;
+        char *temp = trim(obj, &current_file);
+        mx_print_permission_error(current_file);
+        mx_strdel(&current_file);
+        mx_strdel(&temp);
     }
 }
 
@@ -85,7 +93,7 @@ static void two_and_more_obj(t_flags *flags) {
             mx_array_reverse(sort->dirs, sort->len_of_dirs_array);
     }
     if (sort->len_of_files_array != 0) {
-        if (isatty(1))
+        if (flags->switch_flags[5] != 1)
             mx_output_by_size_of_wind(sort->files, sort->len_of_files_array);
         else
             mx_output_in_one_column(sort->files, sort->len_of_files_array);
@@ -148,4 +156,37 @@ static void add_to_array(char **array, char *obj, int i, struct dirent *director
         array[i] = mx_strcpy(array[i], directory->d_name);
     }
     mx_strdel(&full_path);
+}
+
+static char *trim(char *string, char **current_file) {
+    int count = 0;
+    int index = 0;
+    bool has_slash = false;
+    char *res = NULL;
+    int len = mx_strlen(string);
+    for (int j = 0; j < len; ++j) {
+        if (*string == '/') {
+            has_slash = true;
+            index = count;
+        }
+        string++;
+        count++;
+    }
+    string -= count;
+    res = mx_strnew(index);
+    if (has_slash) {
+        for (int i = 0; i <= index; i++) {
+            *res = *string;
+            res++;
+            string++;
+        }
+        index++;
+    }
+    *current_file = mx_strdup(string);
+    string -= index;
+    res -= index;
+    if (index == 0) {
+        res = mx_strcpy(res, ".");
+    }
+    return res;
 }

@@ -35,6 +35,9 @@ void mx_print_one_obj(char *obj) {
         } else
             free(array);
     }
+    else if (errno == 13) {
+        mx_print_permission_error(obj);
+    }
     else {
         mx_printstr(obj);
         mx_printchar('\n');

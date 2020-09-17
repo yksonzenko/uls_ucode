@@ -17,6 +17,7 @@ void mx_flag_l(t_flags *flags, t_sorted_odj *sort) {
 
 static void check_and_open_dirs(t_lattrib **lattrib, t_flags *flags, t_sorted_odj *sort) {
     DIR *d;
+    char *dir_without_permission = NULL;
     struct dirent *dir;
     int i = 0;
     sort->len_of_files_array = 0;
@@ -30,20 +31,34 @@ static void check_and_open_dirs(t_lattrib **lattrib, t_flags *flags, t_sorted_od
                 }
                 mx_printstr(sort->dirs[j]);
                 mx_printstr(":\n");
-                closedir(d);
-                continue;
-            }
-            sort->files = (char **)malloc(sizeof(char *) * sort->len_of_files_array + 1);
-            while((dir = readdir(d)) != NULL) {
-                if (dir->d_name[0] != '.') { // case without '-a' and '-A'
-                    sort->files[i] = mx_strdup(dir->d_name);
-                    i++;
+                if (d) {
+                    closedir(d);
+                    continue;
                 }
             }
-            mx_alphabet_sort(sort->files, sort->len_of_files_array);
-            check_and_print_files(lattrib, flags, sort, j);
-            closedir(d);
-            i = 0;
+            if (d) {
+                sort->files = (char **)malloc(sizeof(char *) * sort->len_of_files_array + 1);
+                while ((dir = readdir(d)) != NULL) {
+                    if (dir->d_name[0] != '.') { // case without '-a' and '-A'
+                        sort->files[i] = mx_strdup(dir->d_name);
+                        i++;
+                    }
+                }
+                mx_alphabet_sort(sort->files, sort->len_of_files_array);
+                check_and_print_files(lattrib, flags, sort, j);
+                closedir(d);
+                i = 0;
+            }
+            else {
+                dir_without_permission = mx_memrchr(sort->dirs[j], '/', mx_strlen(sort->dirs[j]));
+                if (dir_without_permission != NULL) {
+                    dir_without_permission++;
+                    mx_print_permission_error(dir_without_permission);
+                    dir_without_permission = NULL;
+                }
+                else
+                    mx_print_permission_error(sort->dirs[j]);
+            }
         }
     }
     else {

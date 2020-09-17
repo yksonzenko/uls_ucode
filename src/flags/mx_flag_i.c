@@ -77,9 +77,11 @@ static t_result *one_obj(char *obj, t_flags *flags) {
         mx_alphabet_sort2(array, len_of_array);
         if (flags->switch_flags[7] == 1)
             mx_array_reverse(array, len_of_array);
-        struct_result->result = (char **)malloc(sizeof(char *) * len_of_array);
-        for (int k = 0; k < len_of_array; ++k) {
-            struct_result->result[k] = mx_strdup(array[k]);
+        if (len_of_array != 0) {
+            struct_result->result = (char **) malloc(sizeof(char *) * len_of_array);
+            for (int k = 0; k < len_of_array; ++k) {
+                struct_result->result[k] = mx_strdup(array[k]);
+            }
         }
         struct_result->length = len_of_array;
         if (len_of_array != 0) {
@@ -177,9 +179,6 @@ static void two_and_more_obj(t_flags *flags) {
                 mx_strdel(&struct_result->result[struct_result->length - 1]);
             mx_del_strarr(&struct_result->result);
             struct_result->length = 0;
-        }
-        else if (struct_result->length == 0 && struct_result->result) {
-            free(struct_result->result);
         }
         free(struct_result);
     }
